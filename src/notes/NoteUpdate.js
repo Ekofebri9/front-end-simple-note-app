@@ -1,46 +1,77 @@
 import React, {Component} from 'react';
-import { StyleSheet, Text, View, TouchableOpacity} from 'react-native';
-import Counter from '../components/counter';
-import Header from '../components/Header'
+import { Image,StyleSheet,Picker } from 'react-native';
+import { Container, Text, Header, Left, Body, Right, Title, Button, Icon, Content, Form, Textarea } from 'native-base';
+
 
 export default class Notes extends Component {
-    static navigationOptions = {
-        title: 'NoteUpdate'
-    }
-  constructor(){
-    super();
-    
+  constructor(props) {
+    super(props);
+    this.state = {
+      selected: "key1"
+    };
+  }
+  onValueChange(value: string) {
+    this.setState({
+      selected: value
+    });
+
+
   }
   handleGoBack = () => {
     const {navigation}= this.props; //es6
     navigation.goBack();
-
     this.props.navigation.goBack();
   }
   render() {
     return (
-      <View style={styles.container}>
-        <Header title="NoteUpdate" />
-        <Text style={styles.welcome}>WelcomeReact Native!</Text>
-        <Counter title="Try to count" />
-        <TouchableOpacity onPress={this.handleGoBack} style={{backgroundColor:'blue'}} >
-          <Text style={{color:'white'}} >GO BACK</Text>
-        </TouchableOpacity>
-      </View>
+      <Container>
+        <Header style={{ backgroundColor: '#FFFFFF'}}>
+          <Left style={{flex: 1}}>
+            <Button transparent onPress={this.handleGoBack} >
+              <Icon name='arrow-back' style={{ color: 'black'}}/>
+            </Button>
+          </Left>
+          <Body style={{flex: 1,alignItems:'center'}}>
+            <Title style={{color: 'black' }}>Add Note</Title>
+          </Body>
+          <Right style={{flex: 1}}>
+            <Button transparent style={{left:5,top:2}} onPress={this.handleGoBack}>
+              <Image source={require('../public/assets/checked.png')}/>
+            </Button>
+          </Right>
+        </Header>
+        <Content padder>
+        <Form style={{marginLeft:15, marginTop:20,}}>
+            <Textarea style={{fontSize:20}} rowSpan={2} placeholder='ADD TITLE...' />
+          </Form>
+          <Form style={{marginLeft:15, marginBottom:10}}>
+            <Textarea style={{fontSize:20}} rowSpan={12} placeholder='ADD DESCRIPTION...' />
+            <Text style={{paddingLeft:5,fontWeight:'bold', fontSize: 20}}>Category</Text>
+            <Picker
+              selectedValue={this.state.language}
+              
+              style={styles.pick}
+              itemStyle={{fontWeight:'bold'}}
+              onValueChange={(itemValue, itemIndex) => this.setState({language: itemValue}) }>
+              <Picker.Item label="Java" value="java" />
+              <Picker.Item label="JavaScript" value="js" />
+            </Picker>
+
+          </Form>
+        </Content>
+      </Container>
     );
   }
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1, //flexBox CSS
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
+  pick: {
+    height: 50,
+    width: 150,
+    borderWidth: 1,
   },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
+  icon: {
+    width: 24,
+    height: 24,
   }
 });

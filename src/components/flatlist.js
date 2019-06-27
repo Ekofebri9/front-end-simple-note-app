@@ -1,87 +1,117 @@
 import React from "react";
-import { FlatList } from "react-native";
-import { Text, ListItem, Left, Body, Icon, Right, Title } from "native-base";
+import { FlatList, Text, View, Dimensions } from "react-native";
+var {width, hight}=Dimensions.get('window');
+
 export default class App extends React.Component {
   constructor() {
     super();
     this.state = {
       data: [
-        { name: "Movies", header: true },
-        { name: "Interstellar", header: false },
-        { name: "Dark Knight", header: false },
-        { name: "Pop", header: false },
-        { name: "Pulp Fiction", header: false },
-        { name: "Burning Train", header: false },
-        { name: "Music", header: true },
-        { name: "Adams", header: false },
-        { name: "Nirvana", header: false },
-        { name: "Amrit Maan", header: false },
-        { name: "Oye Hoye", header: false },
-        { name: "Eminem", header: false },
-        { name: "Places", header: true },
-        { name: "Jordan", header: false },
-        { name: "Punjab", header: false },
-        { name: "Ludhiana", header: false },
-        { name: "Jamshedpur", header: false },
-        { name: "India", header: false },
-        { name: "People", header: true },
-        { name: "Jazzy", header: false },
-        { name: "Appie", header: false },
-        { name: "Baby", header: false },
-        { name: "Sunil", header: false },
-        { name: "Arrow", header: false },
-        { name: "Things", header: true },
-        { name: "table", header: false },
-        { name: "chair", header: false },
-        { name: "fan", header: false },
-        { name: "cup", header: false },
-        { name: "cube", header: false }
-      ],
+        {
+            "id_note":38,
+            "title":"work5",
+            "content":"i will do my best",
+            "date":"2019-06-20T05:59:42.000Z",
+            "date_update":"2019-06-20T05:59:42.000Z",
+            "category":"yearly"
+        },
+        {
+            "id_note":37,
+            "title":"work4",
+            "content":"today must be finish",
+            "date":"2019-06-20T05:59:42.000Z",
+            "date_update":"2019-06-20T05:59:42.000Z",
+            "category":"yearly"
+        },
+        {
+            "id_note":36,
+            "title":"work3",
+            "content":"for tomorrow",
+            "date":"2019-06-20T05:59:42.000Z",
+            "date_update":"2019-06-20T05:59:42.000Z",
+            "category":"yearly"},
+        {
+            "id_note":35,
+            "title":"work2",
+            "content":"not yettttt",
+            "date":"2019-06-20T05:59:42.000Z",
+            "date_update":"2019-06-20T05:59:42.000Z",
+            "category":"yearly"
+        },
+        {
+            "id_note":34,
+            "title":"work1",
+            "content":"i have done ",
+            "date":"2019-06-20T05:59:42.000Z",
+            "date_update":"2019-06-20T05:59:42.000Z",
+            "category":"yearly"
+        },
+        {
+            "id_note":25,
+            "title":"ujian3",
+            "content":"belajar mulai besok/sekarang",
+            "date":"2019-06-20T05:49:36.000Z",
+            "date_update":"2019-06-20T05:49:36.000Z",
+            "category":"daily"
+        },
+        {
+            "id_note":24,
+            "title":"ujian2",
+            "content":"belajar mulai besok sekarang",
+            "date":"2019-06-20T05:48:57.000Z",
+            "date_update":"2019-06-20T05:48:57.000Z",
+            "category":"yearly"
+        },
+        {
+            "id_note":23,
+            "title":"ujian1",
+            "content":"belajar mulai sekarang",
+            "date":"2019-06-20T05:48:18.000Z",
+            "date_update":"2019-06-20T05:48:18.000Z",
+            "category":"yearly"
+        },
+        {
+            "id_note":9,
+            "title":"tugas5",
+            "content":"harus selesai sebelum deadline oke",
+            "date":"2019-06-19T14:35:27.000Z",
+            "date_update":"2019-06-19T14:36:03.000Z",
+            "category":"daily"
+        }
+    ],
       stickyHeaderIndices: []
     };
   }
   componentWillMount() {
     var arr = [];
     this.state.data.map(obj => {
-      if (obj.header) {
+      if (obj.id_note) {
         arr.push(this.state.data.indexOf(obj));
       }
     });
     arr.push(0);
-    this.setState({
-      stickyHeaderIndices: arr
-    });
   }
   renderItem = ({ item }) => {
-    if (item.header) {
       return (
-        <ListItem itemDivider>
-          <Left />
-          <Body style={{ marginRight: 40 }}>
-            <Text style={{ fontWeight: "bold" }}>
-              {item.name}
-            </Text>
-          </Body>
-          <Right />
-        </ListItem>
+        <View style={{width: 0.4*width, hight:0.2*hight,margin:10, backgroundColor:'blue',borderRadius: 15}}>
+        <Text>judul= {item.title}</Text>
+        <Text>isi= {item.content}</Text>
+        <Text>tgl= {item.date}</Text>
+        <Text>tgl= {item.date_update}</Text>
+        <Text>kategory= {item.category}</Text>
+
+        </View>
+            
+          
       );
-    } else if (!item.header) {
-      return (
-        <ListItem style={{ marginLeft: 0 }}>
-          <Body>
-            <Text>{item.name}</Text>
-          </Body>
-        </ListItem>
-      );
-    }
   };
   render() {
     return (
       <FlatList
         data={this.state.data}
         renderItem={this.renderItem}
-        keyExtractor={item => item.name}
-        stickyHeaderIndices={this.state.stickyHeaderIndices}
+        keyExtractor={item => item.id_note}
+        numColumns={2}
       />
     );
   }

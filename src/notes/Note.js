@@ -1,20 +1,21 @@
 import React, {Component} from 'react';
-import { StyleSheet, Text,Image } from 'react-native';
+import { StyleSheet, Text,Image, Modal, TouchableHighlight,Dimensions } from 'react-native';
 import { Container, Thumbnail, View, Header, Left, Body, Right, Title, Button, Icon, Fab, Content, Item, Input } from 'native-base';
 import Flatlist from '../components/flatlist';
-export default class Notes extends Component {
-  static navigationOptions = {
-    drawerIcon: ({ tintColor }) => (
-      <Image
-        source={require('../public/assets/portfolio.png')}
-        style={[styles.icon, {tintColor: tintColor}]}
-      />
-    ),
-  };
 
-  constructor(){
-    super();
+var {height, width} = Dimensions.get('window');
+
+export default class Notes extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      modalVisible: false,
+    };
   }
+  setModalVisible(visible) {
+    this.setState({modalVisible: visible});
+  }
+  
   render() {
     return (
       <Container>
@@ -25,41 +26,56 @@ export default class Notes extends Component {
             </Button>
           </Left>
           <Body style={{flex: 1,alignItems:'center'}}>
-            <Title style={{color: '#000000' }}>Note App</Title>
+            <Title style={{color: 'black' }}>Note App</Title>
           </Body>
           <Right style={{flex: 1}}>
-            <Button transparent style={{left:5,top:2}}>
-            <Thumbnail square small source={require('../public/assets/download.png')}/>
+            <Button transparent onPress={() => { this.setModalVisible(true); }} >
+              <Image style={styles.icon} source={require('../public/assets/download.png')}/>
             </Button>
           </Right>
         </Header>
-        <View style={{ padding:10, shadowRadius:5, shadowOpacity:10}}>
-          <Item rounded style={{ backgroundColor: '#FFFFFF', alignSelf:'center', width:304, hight:37,shadowColor: 'rgba(37, 36, 36, 0.25)',shadowOffset:{
-	width: 0,
-	height: 4,
-},
-shadowOpacity: 0.32,
-shadowRadius: 5.46,
-
-elevation: 9,
-borderRadius: 15}}>
-            <Input placeholder='Search '/>
+        <View style={{ paddingVertical:10, shadowRadius:5, shadowOpacity:5}}>
+          <Item rounded style={styles.search}>
+            <Input placeholder='Search.... '/>
           </Item>
-          </View>
-        <Content>
+        </View>
+        <Content style={{ flax: 1}}>
+        <View>
         <Flatlist>
         </Flatlist>
+        </View>
         </Content>
-        <View style={{ flex: 1 }}>
+        <View >
           <Fab
             direction="up"
-            containerStyle={{ color:'#FFFFFF'}}
-            style={{ backgroundColor: '#5067FF' }}
+            containerStyle={{ color:'#FFF11F'}}
+            style={{ backgroundColor: '#FFFFFF' }}
             position="bottomRight"
             onPress={() => this.props.navigation.navigate('NoteAdd')}>
-            <Icon name="add" />
+            <Icon name="add" style={{ color: 'black' }}/>
           </Fab>
         </View>
+        <View style={{marginTop: 22}}>
+        <Modal
+          animationType="fade"
+          transparent={true}
+          visible={this.state.modalVisible}>
+          <View style={ styles.modal }>
+              <TouchableHighlight
+                onPress={() => {
+                  this.setModalVisible(!this.state.modalVisible);
+                }}>
+                <Text style={{fontSize:20,color:'black'}}>Ascending</Text>
+              </TouchableHighlight>
+              <TouchableHighlight
+                onPress={() => {
+                  this.setModalVisible(!this.state.modalVisible);
+                }}>
+                <Text style={{fontSize:20,color:'black'}}>Descending</Text>
+              </TouchableHighlight>
+          </View>
+        </Modal>
+      </View>
       </Container>
     
     );
@@ -67,15 +83,32 @@ borderRadius: 15}}>
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1, //flexBox CSS
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
+  search: {
+    backgroundColor: '#FFFFFF',
+    alignSelf:'center',
+    width:'90%',
+    shadowOpacity: 0.32,
+    shadowRadius: 5.46,
+    elevation: 9,
+    borderRadius: 20,
+    shadowColor: 'rgba(37, 36, 36, 0.25)',
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    }
   },
-  welcome: {
-    fontSize: 20,
+  icon: {
+    width: 25,
+    height: 25,
+  },
+  modal: {
     textAlign: 'center',
-    margin: 10,
+    alignSelf: 'flex-end',
+    position: 'absolute',
+    backgroundColor:'white',
+    marginTop: 0.09*height,
+    padding: 10,
+    borderRadius: 5,
+    elevation: 5
   }
 });
