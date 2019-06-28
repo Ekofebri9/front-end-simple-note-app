@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
-import { StyleSheet, Text,Image, Modal, TouchableHighlight,Dimensions } from 'react-native';
+import { StyleSheet, Text,Image, Modal, TouchableHighlight,Dimensions, FlatList } from 'react-native';
 import { Container, Thumbnail, View, Header, Left, Body, Right, Title, Button, Icon, Fab, Content, Item, Input } from 'native-base';
-import Flatlist from '../components/flatlist';
+import ListNote from '../components/flatlist';
 
 var {height, width} = Dimensions.get('window');
 
@@ -9,6 +9,80 @@ export default class Notes extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      data: [
+        {
+            "id_note":38,
+            "title":"work5",
+            "content":"i will do my best",
+            "date":"2019-06-20T05:59:42",
+            "date_update":"2019-06-20T05:59:42",
+            "category":1
+        },
+        {
+            "id_note":37,
+            "title":"work4",
+            "content":"today must be finish",
+            "date":"2019-06-20T05:59:42",
+            "date_update":"2019-06-20T05:59:42",
+            "category":1
+        },
+        {
+            "id_note":36,
+            "title":"work3",
+            "content":"for tomorrow",
+            "date":"2019-06-20T05:59:42",
+            "date_update":"2019-06-20T05:59:42",
+            "category":2
+        },
+        {
+            "id_note":35,
+            "title":"work2",
+            "content":"not yettttt",
+            "date":"2019-06-20T05:59:42",
+            "date_update":"2019-06-20T05:59:42",
+            "category":3
+        },
+        {
+            "id_note":34,
+            "title":"work1",
+            "content":"i have done ",
+            "date":"2019-06-20T05:59:42",
+            "date_update":"2019-06-20T05:59:42",
+            "category":3
+        },
+        {
+            "id_note":25,
+            "title":"ujian3",
+            "content":"belajar mulai besok/sekarang",
+            "date":"2019-06-20T05:49:36",
+            "date_update":"2019-06-20T05:49:36",
+            "category":2
+        },
+        {
+            "id_note":24,
+            "title":"ujian2",
+            "content":"belajar mulai besok sekarang",
+            "date":"2019-06-20T05:48:57",
+            "date_update":"2019-06-20T05:48:57",
+            "category":4
+        },
+        {
+            "id_note":23,
+            "title":"ujian1",
+            "content":"belajar mulai sekarang",
+            "date":"2019-06-20T05:48:18",
+            "date_update":"2019-06-20T05:48:18",
+            "category":1
+        },
+        {
+            "id_note":9,
+            "title":"tugas5",
+            "content":"harus selesai sebelum deadline oke",
+            "date":"2019-06-19T14:35:27",
+            "date_update":"2019-06-19T14:36:03",
+            "category":5
+        }
+    ],
       modalVisible: false,
     };
   }
@@ -40,10 +114,13 @@ export default class Notes extends Component {
           </Item>
         </View>
         <Content style={{ flax: 1}}>
-        <View>
-        <Flatlist>
-        </Flatlist>
-        </View>
+        
+        <FlatList style={{alignSelf:'center'}}
+        data={this.state.data}
+        renderItem={ ( {item} ) => <ListNote data={item} navigation={this.props.navigation}/>}
+        keyExtractor={item => item.id_note}
+        numColumns={2}
+      />
         </Content>
         <View >
           <Fab

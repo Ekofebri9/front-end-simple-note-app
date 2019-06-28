@@ -1,35 +1,15 @@
-import { createAppContainer,createStackNavigator, createDrawerNavigator, DrawerItems } from "react-navigation";
+import { createAppContainer,createStackNavigator, createDrawerNavigator } from "react-navigation";
 import React, {Component} from 'react';
 import { Image,StyleSheet,SafeAreaView,ScrollView, Dimensions } from 'react-native'
-import { Container,Header, Body, Content, Thumbnail, Text, Button } from "native-base";
 import Note from '../../notes/Note';
 import NoteAdd from '../../notes/NoteAdd';
 import NoteUpdate from '../../notes/NoteUpdate';
 import AddCategory from '../../categories/AddCategory';
+import EditPageDrawer from '../../components/Drawer';
 
-const editPageDrawer = (props) => (
-  <Container>
-    <SafeAreaView>
-      <ScrollView>
-        <Header style={{flex:1,height:150,backgroundColor:'#FFFFFF', borderBottomColor:'none', elevation: 0}}>
-          <Body style={{alignItems:"center"}}>
-            <Thumbnail large source={require('../assets/foto.png')} style={{marginTop:25}}/>
-            <Text style={{marginTop:25}}>EKO FEBERIYANTO</Text>
-          </Body>
-        </Header>
-        <Content style={{marginTop:30, marginLeft:20}}>
-          <DrawerItems {...props}/>
-          <Button iconLeft transparent onPress={() => this.props.navigation.closeDrawer()} >
-            <Image source={require('../assets/plus.png')} style={styles.icon}/>
-            <Text style={{color:'black'}}>Add Category</Text> 
-          </Button>
-        </Content>
-      </ScrollView>
-      
-   </SafeAreaView>
-  </Container>
+const editPageDrawer =(props)=>(
+  <EditPageDrawer/>
 )
-
 const AppNavigator = createStackNavigator({
   Note: {
     screen: Note,
@@ -47,6 +27,7 @@ const AppNavigator = createStackNavigator({
     header: null,
   }
 });
+
 const {height, width} = Dimensions.get('window');
 const AppDrawerNavigator = createDrawerNavigator({
   Personal: { 
@@ -97,15 +78,5 @@ const styles = StyleSheet.create({
     width: 24,
     height: 24,
     marginLeft:10
-  },
-  modal: {
-    textAlign: 'center',
-    alignSelf: 'center',
-    position: 'absolute',
-    backgroundColor:'white',
-    marginTop: 0.09*height,
-    padding: 10,
-    borderRadius: 5,
-    elevation: 5
   }
 });

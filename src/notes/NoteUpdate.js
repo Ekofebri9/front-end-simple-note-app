@@ -3,7 +3,7 @@ import { Image,StyleSheet,Picker } from 'react-native';
 import { Container, Text, Header, Left, Body, Right, Title, Button, Icon, Content, Form, Textarea } from 'native-base';
 
 
-export default class Notes extends Component {
+export default class NoteUpdate extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -42,14 +42,13 @@ export default class Notes extends Component {
         </Header>
         <Content padder>
         <Form style={{marginLeft:15, marginTop:20,}}>
-            <Textarea style={{fontSize:20}} rowSpan={2} placeholder='ADD TITLE...' />
+            <Textarea style={{fontSize:20}} rowSpan={2} placeholder='ADD TITLE...' value={this.props.navigation.state.params.title}/>
           </Form>
           <Form style={{marginLeft:15, marginBottom:10}}>
-            <Textarea style={{fontSize:20}} rowSpan={12} placeholder='ADD DESCRIPTION...' />
+            <Textarea style={{fontSize:20}} rowSpan={12} placeholder='ADD DESCRIPTION...' value={this.props.navigation.state.params.content}/>
             <Text style={{paddingLeft:5,fontWeight:'bold', fontSize: 20}}>Category</Text>
             <Picker
               selectedValue={this.state.language}
-              
               style={styles.pick}
               itemStyle={{fontWeight:'bold'}}
               onValueChange={(itemValue, itemIndex) => this.setState({language: itemValue}) }>
@@ -69,6 +68,7 @@ const styles = StyleSheet.create({
     height: 50,
     width: 150,
     borderWidth: 1,
+    elevation: 5
   },
   icon: {
     width: 24,
