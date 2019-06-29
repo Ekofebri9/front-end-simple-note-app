@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import { StyleSheet, Text,Image, Modal, TouchableHighlight,Dimensions, FlatList } from 'react-native';
 import { Container, Thumbnail, View, Header, Left, Body, Right, Title, Button, Icon, Fab, Content, Item, Input } from 'native-base';
 import ListNote from '../components/flatlist';
+import axios from 'axios';
 
 var {height, width} = Dimensions.get('window');
 
@@ -9,152 +10,244 @@ export default class Notes extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      modalVisible: false,
+      total: 0,
+      sort: 'desc',
       data: [
         {
-            "id_note":38,
-            "title":"work5",
-            "content":"i will do my best",
-            "date":"2019-06-20T05:59:42",
-            "date_update":"2019-06-20T05:59:42",
-            "category":1
+            "id": 15,
+            "title": "note143",
+            "content": "harus selesai sebelum deadline oke",
+            "created_at": "2019-06-28T23:53:42.000Z",
+            "updated_at": "2019-06-28T23:53:42.000Z",
+            "category": {
+                "category_name": "weekly"
+            }
         },
         {
-            "id_note":37,
-            "title":"work4",
-            "content":"today must be finish",
-            "date":"2019-06-20T05:59:42",
-            "date_update":"2019-06-20T05:59:42",
-            "category":1
+            "id": 14,
+            "title": "note123",
+            "content": "harus selesai sebelum deadline oke",
+            "created_at": "2019-06-28T23:52:23.000Z",
+            "updated_at": "2019-06-28T23:52:23.000Z",
+            "category": {
+                "category_name": "daily"
+            }
         },
         {
-            "id_note":36,
-            "title":"work3",
-            "content":"for tomorrow",
-            "date":"2019-06-20T05:59:42",
-            "date_update":"2019-06-20T05:59:42",
-            "category":2
+            "id": 13,
+            "title": "note13",
+            "content": "harus selesai sebelum deadline oke",
+            "created_at": "2019-06-28T23:52:11.000Z",
+            "updated_at": "2019-06-28T23:52:11.000Z",
+            "category": {
+                "category_name": "private"
+            }
         },
         {
-            "id_note":35,
-            "title":"work2",
-            "content":"not yettttt",
-            "date":"2019-06-20T05:59:42",
-            "date_update":"2019-06-20T05:59:42",
-            "category":3
+            "id": 12,
+            "title": "note3",
+            "content": "harus selesai sebelum deadline oke",
+            "created_at": "2019-06-28T23:51:57.000Z",
+            "updated_at": "2019-06-28T23:51:57.000Z",
+            "category": {
+                "category_name": "personal"
+            }
         },
         {
-            "id_note":34,
-            "title":"work1",
-            "content":"i have done ",
-            "date":"2019-06-20T05:59:42",
-            "date_update":"2019-06-20T05:59:42",
-            "category":3
+            "id": 11,
+            "title": "note32",
+            "content": "harus selesai sebelum deadline oke",
+            "created_at": "2019-06-28T23:51:43.000Z",
+            "updated_at": "2019-06-28T23:51:43.000Z",
+            "category": {
+                "category_name": "wishlist"
+            }
         },
         {
-            "id_note":25,
-            "title":"ujian3",
-            "content":"belajar mulai besok/sekarang",
-            "date":"2019-06-20T05:49:36",
-            "date_update":"2019-06-20T05:49:36",
-            "category":2
+            "id": 10,
+            "title": "note132",
+            "content": "harus selesai sebelum deadline oke",
+            "created_at": "2019-06-28T23:51:24.000Z",
+            "updated_at": "2019-06-28T23:51:24.000Z",
+            "category": {
+                "category_name": "work"
+            }
         },
         {
-            "id_note":24,
-            "title":"ujian2",
-            "content":"belajar mulai besok sekarang",
-            "date":"2019-06-20T05:48:57",
-            "date_update":"2019-06-20T05:48:57",
-            "category":4
+            "id": 9,
+            "title": "note12",
+            "content": "harus selesai sebelum deadline oke",
+            "created_at": "2019-06-22T14:17:51.000Z",
+            "updated_at": "2019-06-22T14:17:51.000Z",
+            "category": {
+                "category_name": "daily"
+            }
         },
         {
-            "id_note":23,
-            "title":"ujian1",
-            "content":"belajar mulai sekarang",
-            "date":"2019-06-20T05:48:18",
-            "date_update":"2019-06-20T05:48:18",
-            "category":1
+            "id": 3,
+            "title": "note2",
+            "content": "new",
+            "created_at": "2019-06-21T07:44:56.000Z",
+            "updated_at": "2019-06-21T07:44:56.000Z",
+            "category": {
+                "category_name": "daily"
+            }
         },
         {
-            "id_note":9,
-            "title":"tugas5",
-            "content":"harus selesai sebelum deadline oke",
-            "date":"2019-06-19T14:35:27",
-            "date_update":"2019-06-19T14:36:03",
-            "category":5
+            "id": 2,
+            "title": "note1",
+            "content": "new",
+            "created_at": "2019-06-21T07:44:14.000Z",
+            "updated_at": "2019-06-21T07:44:14.000Z",
+            "category": {
+                "category_name": "daily"
+            }
         }
     ],
-      modalVisible: false,
     };
   }
   setModalVisible(visible) {
     this.setState({modalVisible: visible});
   }
-  
+  createRows=(data, total) =>{
+    const rows = total%2; 
+    if ( rows == 0 ){
+      data.push({
+        id: 0,
+        title: null,
+        content: null,
+        created_at: null,
+        update_at: null,
+        category: {category_name: null }
+      });
+    }
+      return data;
+    }
+    fetchData = () => {
+      axios.get(`http:/192.168.6.153:3002/note?sort=`+this.state.sort)
+      .then(res => {
+        const data = res.data.data;
+        this.setState({ data });
+        const total = res.data.total;
+        this.setState({ total: total });
+      })
+      .catch(err =>{
+        
+      })
+    }
+  componentDidMount() {
+    this.fetchData()
+  }
+  /*
+  shouldComponentUpdate() {
+    const different = this.state.sort !== this.state.sortUse
+    return different
+  }
+  componentWillUpdate(){
+    axios.get(`http:/192.168.6.153:3002/note?sort=`+this.state.sort)
+    .then(res => {
+      const data = res.data.data;
+      this.setState({ data });
+      const total = res.data.total;
+      this.setState({ total: total });
+    })
+    .catch(err =>{
+      
+    })
+  }
+  */
   render() {
     return (
       <Container>
-        <Header style={{ backgroundColor: '#FFFFFF'}}>
+        <Header style={{ backgroundColor: '#FFFFFF' }}>
           <Left style={{flex: 1}}>
             <Button transparent onPress={() => this.props.navigation.openDrawer()} >
               <Thumbnail small source={require('../public/assets/foto.png')}/>
             </Button>
           </Left>
-          <Body style={{flex: 1,alignItems:'center'}}>
-            <Title style={{color: 'black' }}>Note App</Title>
+          <Body style={{flex: 1,
+            alignItems:'center'}}>
+            <Title style={{ color: 'black' }}>Note App</Title>
           </Body>
-          <Right style={{flex: 1}}>
+          <Right style={{ flex: 1 }}>
             <Button transparent onPress={() => { this.setModalVisible(true); }} >
-              <Image style={styles.icon} source={require('../public/assets/download.png')}/>
+              <Image style={ styles.icon } source={require('../public/assets/download.png')}/>
             </Button>
           </Right>
         </Header>
-        <View style={{ paddingVertical:10, shadowRadius:5, shadowOpacity:5}}>
-          <Item rounded style={styles.search}>
+        <View style={{
+          paddingVertical:10,
+          shadowRadius:5,
+          shadowOpacity:5}}>
+          <Item rounded style={ styles.search }>
             <Input placeholder='Search.... '/>
           </Item>
         </View>
-        <Content style={{ flax: 1}}>
+        <Content>
+          <View style={{ 
+            flex: 1, 
+            margin: 5}}>
+            <FlatList 
+              data={this.createRows(this.state.data, this.state.total)}
+              renderItem={ ( {item} ) => <ListNote data={item} navigation={this.props.navigation}/>}
+              keyExtractor={item => item.id.toString()}
+              numColumns={2}
+            />
+          </View>
         
-        <FlatList style={{alignSelf:'center'}}
-        data={this.state.data}
-        renderItem={ ( {item} ) => <ListNote data={item} navigation={this.props.navigation}/>}
-        keyExtractor={item => item.id_note}
-        numColumns={2}
-      />
         </Content>
         <View >
           <Fab
             direction="up"
             containerStyle={{ color:'#FFF11F'}}
             style={{ backgroundColor: '#FFFFFF' }}
-            position="bottomRight"
+            position= "bottomRight"
             onPress={() => this.props.navigation.navigate('NoteAdd')}>
             <Icon name="add" style={{ color: 'black' }}/>
           </Fab>
         </View>
-        <View style={{marginTop: 22}}>
+        <View style={{ marginTop: 22 }}>
         <Modal
           animationType="fade"
-          transparent={true}
-          visible={this.state.modalVisible}>
-          <View style={ styles.modal }>
+          transparent={ true }
+          visible={ this.state.modalVisible }>
+          <TouchableHighlight
+            style={{ height: '100%',width: '100%' }}
+            onPress={() => {
+              this.setModalVisible(!this.state.modalVisible);
+            }}>
+            <View style={ styles.modal }>
               <TouchableHighlight
                 onPress={() => {
+                  this.setState({ sort: 'asc'})
                   this.setModalVisible(!this.state.modalVisible);
+                  this.componentDidMount()
                 }}>
-                <Text style={{fontSize:20,color:'black'}}>Ascending</Text>
+                <Text style={{
+                  fontSize:20,
+                  color:'black'}}>
+                  Ascending
+                </Text>
               </TouchableHighlight>
               <TouchableHighlight
                 onPress={() => {
+                  this.setState({ sort: 'desc'})
                   this.setModalVisible(!this.state.modalVisible);
+                  this.componentDidMount()
                 }}>
-                <Text style={{fontSize:20,color:'black'}}>Descending</Text>
+                <Text style={{
+                  fontSize:20,
+                  color:'black'}}>
+                  Descending
+                </Text>
               </TouchableHighlight>
-          </View>
+            </View>
+          </TouchableHighlight>
+          
         </Modal>
       </View>
-      </Container>
-    
+    </Container>
     );
   }
 }

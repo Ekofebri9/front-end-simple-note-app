@@ -1,21 +1,68 @@
 import React, {Component} from 'react';
 import { Image,StyleSheet,Picker } from 'react-native';
 import { Container, Text, Header, Left, Body, Right, Title, Button, Icon, Content, Form, Textarea } from 'native-base';
-
+import axios from 'axios';
 
 export default class NoteUpdate extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      selected: "key1"
+      selected: this.props.navigation.state.params.category,
+      title: this.props.navigation.state.params.title,
+      content:  this.props.navigation.state.params.content,
+      data: [
+        {
+            "id": 36,
+            "category_name": "work",
+            "createdAt": "2019-06-23T05:43:36.000Z",
+            "updatedAt": "2019-06-23T05:43:36.000Z"
+        },
+        {
+            "id": 41,
+            "category_name": "wishlist",
+            "createdAt": "2019-06-23T05:43:36.000Z",
+            "updatedAt": "2019-06-23T05:43:36.000Z"
+        },
+        {
+            "id": 42,
+            "category_name": "personal",
+            "createdAt": "2019-06-23T05:43:36.000Z",
+            "updatedAt": "2019-06-23T05:43:36.000Z"
+        },
+        {
+            "id": 43,
+            "category_name": "private",
+            "createdAt": "2019-06-23T05:43:36.000Z",
+            "updatedAt": "2019-06-23T05:43:36.000Z"
+        },
+    ]
     };
   }
-  onValueChange(value: string) {
+  componentDidMount() {
+    axios.get(`http:/192.168.6.153:3002/category`)
+      .then(res => {
+        const data = res.data.content;
+        this.setState({ data });
+      })
+      .catch(err =>{
+        
+      })
+  }
+  onValueChange=(value ) => {
     this.setState({
       selected: value
+      
     });
-
-
+  }
+  onTitleChange=(value ) => {
+    this.setState({
+      title: value
+    });
+  }
+  onContentChange=(value ) => {
+    this.setState({
+      content: value
+    });
   }
   handleGoBack = () => {
     const {navigation}= this.props; //es6
@@ -32,7 +79,7 @@ export default class NoteUpdate extends Component {
             </Button>
           </Left>
           <Body style={{flex: 1,alignItems:'center'}}>
-            <Title style={{color: 'black' }}>Add Note</Title>
+            <Title style={{color: 'black' }}>Update Note</Title>
           </Body>
           <Right style={{flex: 1}}>
             <Button transparent style={{left:5,top:2}} onPress={this.handleGoBack}>
@@ -42,18 +89,23 @@ export default class NoteUpdate extends Component {
         </Header>
         <Content padder>
         <Form style={{marginLeft:15, marginTop:20,}}>
-            <Textarea style={{fontSize:20}} rowSpan={2} placeholder='ADD TITLE...' value={this.props.navigation.state.params.title}/>
+            <Textarea style={{fontSize:20}} rowSpan={2} placeholder='ADD TITLE...'
+              onChangeText={ this.onTitleChange }
+              value={this.state.title}/>
           </Form>
           <Form style={{marginLeft:15, marginBottom:10}}>
-            <Textarea style={{fontSize:20}} rowSpan={12} placeholder='ADD DESCRIPTION...' value={this.props.navigation.state.params.content}/>
-            <Text style={{paddingLeft:5,fontWeight:'bold', fontSize: 20}}>Category</Text>
+            <Textarea style={{fontSize:20}} rowSpan={12} placeholder='ADD DESCRIPTION...'
+            onChangeText={ this.onContentChange }
+            value={this.state.content}/>
+            <Text style={{paddingLeft:5,fontWeight:'bold', fontSize: 20}}>Category </Text>
             <Picker
-              selectedValue={this.state.language}
+              selectedValue={this.state.selected}
               style={styles.pick}
               itemStyle={{fontWeight:'bold'}}
-              onValueChange={(itemValue, itemIndex) => this.setState({language: itemValue}) }>
-              <Picker.Item label="Java" value="java" />
-              <Picker.Item label="JavaScript" value="js" />
+              onValueChange={(itemValue, itemIndex) => this.setState({selected: itemValue}) }>
+              {this.state.data.map( item => (
+                <Picker.Item key={item.id} label={item.category_name} value={item.category_name} />
+              ) )}
             </Picker>
 
           </Form>

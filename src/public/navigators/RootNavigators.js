@@ -65,7 +65,6 @@ const AppDrawerNavigator = createDrawerNavigator({
     },
 },
 { 
-  drawerWidth: width*0.65,
   drawerPosition:'left',
   contentComponent: editPageDrawer
 });

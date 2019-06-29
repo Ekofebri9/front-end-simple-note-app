@@ -17,25 +17,33 @@ export default class AddCategory extends Component {
   
   render() {
     return (
-        <View style={{marginTop: 22}}>
+        <View style={{ marginTop: 22 }}>
         <Modal
           animationType="fade"
-          transparent={true}
-          visible={this.state.modalVisible}>
+          transparent={ true }
+          visible={ his.state.modalVisible }>
           <View style={ styles.modal }>
-              <TouchableHighlight
-                onPress={() => {
-                  this.setModalVisible(!this.state.modalVisible);
-                  this.props.navigation.navigate('Note');
-                }}>
-                <Text style={{fontSize:20,color:'black'}}>Ascending</Text>
-              </TouchableHighlight>
-              <TouchableHighlight
-                onPress={() => {
-                  this.setModalVisible(!this.state.modalVisible);
-                }}>
-                <Text style={{fontSize:20,color:'black'}}>Descending</Text>
-              </TouchableHighlight>
+            <TouchableHighlight
+              onPress={() => {
+                this.setModalVisible(!this.state.modalVisible);
+                this.props.navigation.navigate( 'Note' );
+              }}>
+              <Text style={{
+                fontSize:20,
+                color:'black'}}>
+                Ascending
+              </Text>
+            </TouchableHighlight>
+            <TouchableHighlight
+              onPress={() => {
+                this.setModalVisible(!this.state.modalVisible);
+              }}>
+              <Text style={{
+                fontSize:20,
+                color:'black'}}>
+                Descending
+              </Text>
+            </TouchableHighlight>
           </View>
         </Modal>
       </View>
