@@ -1,162 +1,62 @@
 import React, {Component} from 'react';
-import { StyleSheet, Text,Image, Modal, TouchableHighlight,Dimensions, FlatList } from 'react-native';
+import { StyleSheet, SafeAreaView, ScrollView, RefreshControl, Text,Image, Modal, TouchableHighlight,Dimensions, FlatList } from 'react-native';
 import { Container, Thumbnail, View, Header, Left, Body, Right, Title, Button, Icon, Fab, Content, Item, Input } from 'native-base';
 import ListNote from '../components/flatlist';
-import axios from 'axios';
+//import axios from 'axios';
+
+import { connect } from 'react-redux' 
+import { getNotes,searchNotes } from '../public/redux/action/notes'
 
 var {height, width} = Dimensions.get('window');
 
-export default class Notes extends Component {
+class Notes extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      refreshing: false,
       modalVisible: false,
-      total: 0,
+      praSort: 'desc',
       sort: 'desc',
-      data: [
-        {
-            "id": 15,
-            "title": "note143",
-            "content": "harus selesai sebelum deadline oke",
-            "created_at": "2019-06-28T23:53:42.000Z",
-            "updated_at": "2019-06-28T23:53:42.000Z",
-            "category": {
-                "category_name": "weekly"
-            }
-        },
-        {
-            "id": 14,
-            "title": "note123",
-            "content": "harus selesai sebelum deadline oke",
-            "created_at": "2019-06-28T23:52:23.000Z",
-            "updated_at": "2019-06-28T23:52:23.000Z",
-            "category": {
-                "category_name": "daily"
-            }
-        },
-        {
-            "id": 13,
-            "title": "note13",
-            "content": "harus selesai sebelum deadline oke",
-            "created_at": "2019-06-28T23:52:11.000Z",
-            "updated_at": "2019-06-28T23:52:11.000Z",
-            "category": {
-                "category_name": "private"
-            }
-        },
-        {
-            "id": 12,
-            "title": "note3",
-            "content": "harus selesai sebelum deadline oke",
-            "created_at": "2019-06-28T23:51:57.000Z",
-            "updated_at": "2019-06-28T23:51:57.000Z",
-            "category": {
-                "category_name": "personal"
-            }
-        },
-        {
-            "id": 11,
-            "title": "note32",
-            "content": "harus selesai sebelum deadline oke",
-            "created_at": "2019-06-28T23:51:43.000Z",
-            "updated_at": "2019-06-28T23:51:43.000Z",
-            "category": {
-                "category_name": "wishlist"
-            }
-        },
-        {
-            "id": 10,
-            "title": "note132",
-            "content": "harus selesai sebelum deadline oke",
-            "created_at": "2019-06-28T23:51:24.000Z",
-            "updated_at": "2019-06-28T23:51:24.000Z",
-            "category": {
-                "category_name": "work"
-            }
-        },
-        {
-            "id": 9,
-            "title": "note12",
-            "content": "harus selesai sebelum deadline oke",
-            "created_at": "2019-06-22T14:17:51.000Z",
-            "updated_at": "2019-06-22T14:17:51.000Z",
-            "category": {
-                "category_name": "daily"
-            }
-        },
-        {
-            "id": 3,
-            "title": "note2",
-            "content": "new",
-            "created_at": "2019-06-21T07:44:56.000Z",
-            "updated_at": "2019-06-21T07:44:56.000Z",
-            "category": {
-                "category_name": "daily"
-            }
-        },
-        {
-            "id": 2,
-            "title": "note1",
-            "content": "new",
-            "created_at": "2019-06-21T07:44:14.000Z",
-            "updated_at": "2019-06-21T07:44:14.000Z",
-            "category": {
-                "category_name": "daily"
-            }
-        }
-    ],
+      page: 1,
+      search: '',
     };
   }
   setModalVisible(visible) {
     this.setState({modalVisible: visible});
   }
-  createRows=(data, total) =>{
-    const rows = total%2; 
-    if ( rows == 0 ){
-      data.push({
-        id: 0,
-        title: null,
-        content: null,
-        created_at: null,
-        update_at: null,
-        category: {category_name: null }
-      });
-    }
-      return data;
-    }
-    fetchData = () => {
-      axios.get(`http:/192.168.6.153:3002/note?sort=`+this.state.sort)
-      .then(res => {
-        const data = res.data.data;
-        this.setState({ data });
-        const total = res.data.total;
-        this.setState({ total: total });
-      })
-      .catch(err =>{
+  fetchData = (search,sort,page) => {
+    (this.state.search === '') ? this.props.dispatch(getNotes(sort,page)) : this.props.dispatch(searchNotes(search,sort,page))
+    // axios.get(`http:/192.168.6.153:3002/note?sort=`+this.state.sort)
+    // axios.get(`http:/192.168.43.142:3002/note?sort=`+this.state.sort)
+    // .then(res => {
+    //   const data = res.data.data;
+    //   this.setState({ data });
+    //   const total = res.data.total;
+    //   this.setState({ total: total });
+    // })
+    // .catch(err =>{
         
-      })
+    // })
+  }
+  _onRefresh = () => {
+    //this.setState({refreshing: true});
+    this.fetchData(this.state.search,this.state.sort,this.state.page).then(() => {
+     // this.setState({refreshing: false});
+    });
+  }
+  sort(){
+    this.setModalVisible(!this.state.modalVisible);
+    if ( this.state.praSort !== this.state.sort ) {
+      this.fetchData(this.state.search,this.state.sort,this.state.page)
+      this.setState({praSort: this.state.sort})
     }
+  }
+  search(){
+    if (this.state.search !== '') this.fetchData(this.state.search,this.state.sort,this.state.page)
+  }
   componentDidMount() {
-    this.fetchData()
+    this.fetchData(this.state.search,this.state.sort,this.state.page)
   }
-  /*
-  shouldComponentUpdate() {
-    const different = this.state.sort !== this.state.sortUse
-    return different
-  }
-  componentWillUpdate(){
-    axios.get(`http:/192.168.6.153:3002/note?sort=`+this.state.sort)
-    .then(res => {
-      const data = res.data.data;
-      this.setState({ data });
-      const total = res.data.total;
-      this.setState({ total: total });
-    })
-    .catch(err =>{
-      
-    })
-  }
-  */
   render() {
     return (
       <Container>
@@ -181,21 +81,34 @@ export default class Notes extends Component {
           shadowRadius:5,
           shadowOpacity:5}}>
           <Item rounded style={ styles.search }>
-            <Input placeholder='Search.... '/>
+            <Input placeholder='Search.... '
+              onEndEditing={()=>{ this.search() }}
+              onChangeText={(text) => this.setState({search: text})}
+              value={this.state.search}/>
           </Item>
         </View>
         <Content>
-          <View style={{ 
-            flex: 1, 
-            margin: 5}}>
-            <FlatList 
-              data={this.createRows(this.state.data, this.state.total)}
-              renderItem={ ( {item} ) => <ListNote data={item} navigation={this.props.navigation}/>}
-              keyExtractor={item => item.id.toString()}
-              numColumns={2}
-            />
-          </View>
-        
+        <SafeAreaView>
+          <ScrollView
+            refreshControl={
+              <RefreshControl
+                refreshing={this.props.notes.isLoading}
+                onRefresh={this._onRefresh}
+              />
+            }>
+            <View style={{ flexDirection: 'row', height: '100%',
+              padding: '2%', paddingBottom:0 }}>
+              <FlatList
+                data={(this.state.search === '') ? this.props.notes.data : this.props.notes.search }
+                renderItem={ ( {item} ) => <ListNote data={item} navigation={this.props.navigation}/>}
+                keyExtractor={item => item.id.toString()}
+                refreshing={this.state.refreshing}
+                onRefresh={this._onRefresh}
+                numColumns={2}
+              />
+            </View>
+          </ScrollView>
+          </SafeAreaView>
         </Content>
         <View >
           <Fab
@@ -219,11 +132,10 @@ export default class Notes extends Component {
             }}>
             <View style={ styles.modal }>
               <TouchableHighlight
-                onPress={() => {
-                  this.setState({ sort: 'asc'})
-                  this.setModalVisible(!this.state.modalVisible);
-                  this.componentDidMount()
-                }}>
+                onPressOut={ () => { 
+                  this.sort() 
+                  } }
+                onPress={ () => { this.setState({ sort: 'asc'}) }}>
                 <Text style={{
                   fontSize:20,
                   color:'black'}}>
@@ -231,11 +143,8 @@ export default class Notes extends Component {
                 </Text>
               </TouchableHighlight>
               <TouchableHighlight
-                onPress={() => {
-                  this.setState({ sort: 'desc'})
-                  this.setModalVisible(!this.state.modalVisible);
-                  this.componentDidMount()
-                }}>
+                onPressOut={ () => { this.sort() } }
+                onPress={ () => { this.setState({ sort: 'desc'}) } }>
                 <Text style={{
                   fontSize:20,
                   color:'black'}}>
@@ -251,6 +160,14 @@ export default class Notes extends Component {
     );
   }
 }
+
+const mapStateToProps= state => {
+  return {
+      notes: state.notes,
+  }
+}
+
+export default connect(mapStateToProps)(Notes)
 
 const styles = StyleSheet.create({
   search: {

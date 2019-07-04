@@ -1,57 +1,36 @@
 import React, {Component} from 'react';
 import { Container,Header, Body, Content, Thumbnail, Text, Button, List, ListItem } from "native-base";
 import { Image,StyleSheet,SafeAreaView,ScrollView, Dimensions,View, Modal,TextInput, FlatList,TouchableOpacity,TouchableHighlight } from 'react-native';
-import axios from 'axios';
 import ListCategory from './listCategories';
+
+import { connect } from 'react-redux' 
+import { getCategories, addCategory } from '../public/redux/action/categories'
 
 const {height, width} = Dimensions.get('window');
 
-export default class EditPageDrawer extends Component{
+class EditPageDrawer extends Component{
   constructor(props) {
     super(props);
     this.state = {
       modalVisible: false,
-      data: [
-        {
-            "id": 36,
-            "category_name": "work",
-            "createdAt": "2019-06-23T05:43:36.000Z",
-            "updatedAt": "2019-06-23T05:43:36.000Z"
-        },
-        {
-            "id": 41,
-            "category_name": "wishlist",
-            "createdAt": "2019-06-23T05:43:36.000Z",
-            "updatedAt": "2019-06-23T05:43:36.000Z"
-        },
-        {
-            "id": 42,
-            "category_name": "personal",
-            "createdAt": "2019-06-23T05:43:36.000Z",
-            "updatedAt": "2019-06-23T05:43:36.000Z"
-        },
-        {
-            "id": 43,
-            "category_name": "private",
-            "createdAt": "2019-06-23T05:43:36.000Z",
-            "updatedAt": "2019-06-23T05:43:36.000Z"
-        },
-    ]
+      category_name: '',
+      image_url: ''
     };
   }
+
+  fetchData = () => {
+    this.props.dispatch(getCategories());
+  }
+  addData = () => {
+    this.props.dispatch(addCategory(this.state.category_name));
+  }
   componentDidMount() {
-    axios.get(`http:/192.168.6.153:3002/category`)
-      .then(res => {
-        const data = res.data.content;
-        this.setState({ data });
-      })
-      .catch(err =>{
-        
-      })
+    this.fetchData()
   }
   setModalVisible(visible) {
     this.setState({modalVisible: visible}); 
   }
+
   render(){
     return (
       <Container>
@@ -72,7 +51,7 @@ export default class EditPageDrawer extends Component{
               marginTop:30,
               marginLeft:10 }}>
               <FlatList style={{ alignSelf:'flex-start' }}
-                data={this.state.data}
+                data={this.props.category.data}
                 renderItem={ ( {item} ) => <ListCategory data={item} />}
                 keyExtractor={item => item.id.toString()}/> 
               <Button iconLeft transparent 
@@ -107,6 +86,7 @@ export default class EditPageDrawer extends Component{
                         elevetion: 3 }}>           
                         <View>
                           <TextInput 
+                            onChangeText={(text) => this.setState({category_name: text})}
                             placeholder="Category Name" 
                             placeholderColor='#eee' 
                             style={{
@@ -118,6 +98,7 @@ export default class EditPageDrawer extends Component{
                         </View>
                         <View>
                           <TextInput 
+                            onChangeText={(text) => this.setState({image_url: text})}
                             placeholder="Image Url" 
                             style={{
                               marginLeft: 20,
@@ -131,7 +112,9 @@ export default class EditPageDrawer extends Component{
                             <ListItem noBorder>
                               <TouchableOpacity 
                                 onPress={()=> {
-                                  this.setModalVisible(!this.state.modalVisible); }} 
+                                  this.setModalVisible(!this.state.modalVisible);
+                                  this.addData();
+                                }} 
                                 style={{ marginRight: 20 }}>
                                 <Text style={{
                                   color: '#000', 
@@ -163,6 +146,14 @@ export default class EditPageDrawer extends Component{
     )
   }
 }
+
+const mapStateToProps= state => {
+  return {
+      category: state.category,
+  }
+}
+
+export default connect(mapStateToProps)(EditPageDrawer)
 const styles = StyleSheet.create({
   icon: {
     width: 24,

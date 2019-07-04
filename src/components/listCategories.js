@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import { Text, Button } from 'native-base';
-import { Image, StyleSheet } from 'react-native';
+import { Text, Button, Icon } from 'native-base';
+import { StyleSheet } from 'react-native';
 
 export default class ListIconExample extends Component {
   render() {
     return (
       <Button iconLeft transparent >
-        <Image source={ require( '../public/assets/plus.png' ) } style={ styles.icon } />
+        <Icon name={this.props.data.icon} />
         <Text style={{ color: 'black' }} >{ this.props.data.category_name }</Text>
       </Button>
     );

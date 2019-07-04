@@ -3,58 +3,23 @@ import { Image,StyleSheet,Picker } from 'react-native';
 import { Container, Text, Header, Left, Body, Right, Title, Button, Icon, Content, Form, Textarea } from 'native-base';
 import axios from 'axios';
 
-export default class Notes extends Component {
+import { connect } from 'react-redux' 
+import { addNote } from '../public/redux/action/notes'
+
+class AddNote extends Component {
   constructor( props ) {
     super( props );
     this.state = {
-      selected: "key1",
-      data: [
-        {
-            "id": 36,
-            "category_name": "work",
-            "createdAt": "2019-06-23T05:43:36.000Z",
-            "updatedAt": "2019-06-23T05:43:36.000Z"
-        },
-        {
-            "id": 41,
-            "category_name": "wishlist",
-            "createdAt": "2019-06-23T05:43:36.000Z",
-            "updatedAt": "2019-06-23T05:43:36.000Z"
-        },
-        {
-            "id": 42,
-            "category_name": "personal",
-            "createdAt": "2019-06-23T05:43:36.000Z",
-            "updatedAt": "2019-06-23T05:43:36.000Z"
-        },
-        {
-            "id": 43,
-            "category_name": "private",
-            "createdAt": "2019-06-23T05:43:36.000Z",
-            "updatedAt": "2019-06-23T05:43:36.000Z"
-        },
-    ]
+      data: this.props.category.data,
     };
   }
-  componentDidMount() {
-    axios.get(`http:/192.168.6.153:3002/category`)
-      .then(res => {
-        const data = res.data.content;
-        this.setState({ data });
-      })
-      .catch(err =>{
-        
-      })
+  addData = () => {
+    this.props.dispatch(addNote(this.state.title,this.state.content,this.state.category));
   }
-  onValueChange( value ) {
-    this.setState({
-      selected: value
-    });
-  }
+
   handleGoBack = () => {
     const { navigation }= this.props; //es6
-    navigation.goBack();
-    this.props.navigation.goBack();
+    navigation.navigate('Note');
   }
   render() {
     return (
@@ -71,25 +36,32 @@ export default class Notes extends Component {
             <Title style={{ color: 'black' }}>Add Note</Title>
           </Body>
           <Right style={{ flex: 1 }}>
-            <Button transparent style={{ left:5, top:2 }} onPress={ this.handleGoBack }>
+            <Button transparent 
+              style={{ left:5, top:2 }} 
+              onPress={() => { 
+                this.addData()
+                this.handleGoBack()
+                }}>
               <Image source={require('../public/assets/checked.png')}/>
             </Button>
           </Right>
         </Header>
         <Content padder>
         <Form style={{ marginLeft:15, marginTop:20 }}>
-            <Textarea style={{ fontSize:20 }} rowSpan={2} placeholder='ADD TITLE...' />
+            <Textarea style={{ fontSize:20 }} rowSpan={2} placeholder='ADD TITLE...' onChangeText={(text) => this.setState({title: text})} />
           </Form>
           <Form style={{ marginLeft:15, marginBottom:10 }}>
-            <Textarea style={{ fontSize:20 }} rowSpan={12} placeholder='ADD DESCRIPTION...' />
+            <Textarea style={{ fontSize:20 }} rowSpan={12} placeholder='ADD DESCRIPTION...' onChangeText={(text) => this.setState({content: text})} />
             <Text style={{ paddingLeft:5, fontWeight:'bold', fontSize: 20 }}>Category</Text>
             <Picker
-              selectedValue={this.state.categoryId}
+              selectedValue={this.state.category}
               style={styles.pick}
               itemStyle={{fontWeight:'bold'}}
-              onValueChange={(itemValue, itemIndex) => this.setState({categoryId: itemValue}) }>
+              onValueChange={
+                (itemValue, itemIndex) => { this.setState({category: itemValue}) }}>
+                <Picker.Item label={'--Category--'} color={'#FF0078'} />
               {this.state.data.map( item => (
-                <Picker.Item key={item.id} label={item.category_name} value={item.category_name} />
+                <Picker.Item key={item.id} label={item.category_name} value={item.id} />
               ) )}
             </Picker>
 
@@ -99,6 +71,14 @@ export default class Notes extends Component {
     );
   }
 }
+const mapStateToProps= state => {
+  return {
+      category: state.category,
+      notes: state.notes,
+  }
+}
+
+export default connect(mapStateToProps)(AddNote)
 
 const styles = StyleSheet.create({
   pick: {
