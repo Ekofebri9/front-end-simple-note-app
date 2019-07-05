@@ -4,6 +4,7 @@ import { Container, Thumbnail, View, Header, Left, Body, Right, Title, Button, I
 import ListNote from '../components/flatlist';
 import { connect } from 'react-redux' 
 import { getNotes,searchNotes,onRefresh } from '../public/redux/action/notes'
+import debounce from 'lodash.debounce';
 
 var {height} = Dimensions.get('window');
 
@@ -40,8 +41,10 @@ class Notes extends Component {
       this.setState({praSort: this.state.sort})
     }
   }
-  search(){
-    if (this.state.search !== '') this.fetchData(this.state.search,this.state.sort,this.state.page)
+  search = (keyword) => {
+    //if (this.state.search !== '') this.fetchData(this.state.search,this.state.sort,this.state.page)
+    this.setState({search: keyword})
+    this.fetchData(keyword,this.state.sort,1)
   }
   componentDidMount() {
     this.fetchData(this.state.search,this.state.sort,this.state.page)
@@ -51,18 +54,8 @@ class Notes extends Component {
       this.setState(
         { page : this.state.page + 1 },
           ()=>this.fetchData(this.state.search,this.state.sort,this.state.page))
-    }else{
-      //this.setState({ page : 1 })
     }
 }
-  reachMore(){
-    if (this.state.page < this.props.notes.totalpage){
-     // this.fetchData(this.state.search,this.state.sort,this.props.notes.page)
-     console.warn('ada');
-    }else{
-      console.warn('kena');
-    }  
-  }
   render() {
     return (
       <Container>
@@ -88,8 +81,7 @@ class Notes extends Component {
           shadowOpacity:5}}>
           <Item rounded style={ styles.search }>
             <Input placeholder='Search.... '
-              onEndEditing={()=>{ this.search() }}
-              onChangeText={(text) => this.setState({search: text})}
+              onChangeText={debounce(this.search,10)}
               value={this.state.search}/>
           </Item>
         </View>

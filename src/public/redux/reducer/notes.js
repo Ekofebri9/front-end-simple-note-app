@@ -70,12 +70,12 @@ export default notes = (state = intialState, action) => {
                 total : action.payload.data.total
             }
         case 'SEARCH_NOTES_FULFILLED':
-            let notes3 = (state.search.length != 0) ? [ ...state.search, ...action.payload.data.data] : action.payload.data.data
+            //let notes3 = (state.search.length != 0) ? [ ...state.search, ...action.payload.data.data] : action.payload.data.data
             return {
                 ...state,
                 isLoading: false,
                 isError: false,
-                search: notes3,
+                search: action.payload.data.data,
                 page: action.payload.data.page,
                 totalpage: action.payload.data.totalpage,
                 limit: action.payload.data.limit,

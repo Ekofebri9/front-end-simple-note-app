@@ -1,6 +1,5 @@
 import React from "react";
 import { Text, View,TouchableOpacity, Alert } from "react-native";
-
 import { connect } from 'react-redux' 
 import { deleteNote } from '../public/redux/action/notes'
 
@@ -41,9 +40,9 @@ import { deleteNote } from '../public/redux/action/notes'
     this.props.dispatch(deleteNote(this.state.data.id));
   }
   render() {
-    if (this.state.data.category == null){
-      this.setState({ category:{id: 0, category_name: 'Category not set'} })
-    }
+    // if ( this.state.data.category == null){
+    //   this.setState({ category:{id: 0, category_name: 'Category not set'} })
+    // }
     return (
       <TouchableOpacity style={{ 
         margin:'2%',
