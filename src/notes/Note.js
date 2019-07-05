@@ -1,13 +1,11 @@
 import React, {Component} from 'react';
-import { StyleSheet, SafeAreaView, ScrollView, RefreshControl, Text,Image, Modal, TouchableHighlight,Dimensions, FlatList } from 'react-native';
+import { StyleSheet,  ActivityIndicator, RefreshControl, Text,Image, Modal, TouchableHighlight,Dimensions, FlatList } from 'react-native';
 import { Container, Thumbnail, View, Header, Left, Body, Right, Title, Button, Icon, Fab, Content, Item, Input } from 'native-base';
 import ListNote from '../components/flatlist';
-//import axios from 'axios';
-
 import { connect } from 'react-redux' 
-import { getNotes,searchNotes } from '../public/redux/action/notes'
+import { getNotes,searchNotes,onRefresh } from '../public/redux/action/notes'
 
-var {height, width} = Dimensions.get('window');
+var {height} = Dimensions.get('window');
 
 class Notes extends Component {
   constructor(props) {
@@ -19,30 +17,21 @@ class Notes extends Component {
       sort: 'desc',
       page: 1,
       search: '',
+      categoryId: ''
     };
   }
   setModalVisible(visible) {
     this.setState({modalVisible: visible});
   }
   fetchData = (search,sort,page) => {
-    (this.state.search === '') ? this.props.dispatch(getNotes(sort,page)) : this.props.dispatch(searchNotes(search,sort,page))
-    // axios.get(`http:/192.168.6.153:3002/note?sort=`+this.state.sort)
-    // axios.get(`http:/192.168.43.142:3002/note?sort=`+this.state.sort)
-    // .then(res => {
-    //   const data = res.data.data;
-    //   this.setState({ data });
-    //   const total = res.data.total;
-    //   this.setState({ total: total });
-    // })
-    // .catch(err =>{
-        
-    // })
+    (this.state.search === '') ? 
+    this.props.dispatch(getNotes(sort,page)) : this.props.dispatch(searchNotes(search,sort,page))
   }
   _onRefresh = () => {
-    //this.setState({refreshing: true});
-    this.fetchData(this.state.search,this.state.sort,this.state.page).then(() => {
-     // this.setState({refreshing: false});
-    });
+    this.setState({refreshing: true});
+    this.props.dispatch(onRefresh(this.state.categoryId,this.state.search,this.state.sort,1))
+        this.setState({refreshing: false, page: 1 });
+     
   }
   sort(){
     this.setModalVisible(!this.state.modalVisible);
@@ -56,6 +45,23 @@ class Notes extends Component {
   }
   componentDidMount() {
     this.fetchData(this.state.search,this.state.sort,this.state.page)
+  }
+  handleLoadMore = async () => {
+    if(this.state.page < this.props.notes.totalpage) {
+      this.setState(
+        { page : this.state.page + 1 },
+          ()=>this.fetchData(this.state.search,this.state.sort,this.state.page))
+    }else{
+      //this.setState({ page : 1 })
+    }
+}
+  reachMore(){
+    if (this.state.page < this.props.notes.totalpage){
+     // this.fetchData(this.state.search,this.state.sort,this.props.notes.page)
+     console.warn('ada');
+    }else{
+      console.warn('kena');
+    }  
   }
   render() {
     return (
@@ -87,29 +93,29 @@ class Notes extends Component {
               value={this.state.search}/>
           </Item>
         </View>
-        <Content>
-        <SafeAreaView>
-          <ScrollView
-            refreshControl={
-              <RefreshControl
-                refreshing={this.props.notes.isLoading}
-                onRefresh={this._onRefresh}
-              />
-            }>
-            <View style={{ flexDirection: 'row', height: '100%',
+            <View style={{flex:1, flexDirection: 'row', height: '100%',
               padding: '2%', paddingBottom:0 }}>
-              <FlatList
-                data={(this.state.search === '') ? this.props.notes.data : this.props.notes.search }
-                renderItem={ ( {item} ) => <ListNote data={item} navigation={this.props.navigation}/>}
-                keyExtractor={item => item.id.toString()}
-                refreshing={this.state.refreshing}
-                onRefresh={this._onRefresh}
-                numColumns={2}
-              />
+              {
+                this.props.notes.isLoading ? 
+                (<View style={[styles.container, styles.horizontal]}>
+                  <ActivityIndicator size="large" color="#0000ff" />
+                </View>) : 
+                (<FlatList
+                  data={(this.state.search === '') ? this.props.notes.data : this.props.notes.search }
+                  renderItem={ ( {item} ) => <ListNote data={item} navigation={this.props.navigation}/>}
+                  keyExtractor={(item, index) => index.toString()}
+                  onEndReachedThreshold={0.1}
+                  onEndReached={this.handleLoadMore}
+                  refreshControl={
+                    <RefreshControl
+                      refreshing={this.props.notes.isLoading}
+                      onRefresh={this._onRefresh}
+                    />
+                  }
+                  numColumns={2}
+                />)
+              }
             </View>
-          </ScrollView>
-          </SafeAreaView>
-        </Content>
         <View >
           <Fab
             direction="up"
@@ -153,7 +159,6 @@ class Notes extends Component {
               </TouchableHighlight>
             </View>
           </TouchableHighlight>
-          
         </Modal>
       </View>
     </Container>
@@ -183,6 +188,15 @@ const styles = StyleSheet.create({
       width: 0,
       height: 4,
     }
+  },
+  container: {
+    flex: 1,
+    justifyContent: 'center'
+  },
+  horizontal: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    padding: 10
   },
   icon: {
     width: 25,

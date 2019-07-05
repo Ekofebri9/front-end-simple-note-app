@@ -16,13 +16,12 @@ class UpdateNote extends Component {
       content:  this.props.navigation.state.params.content,
     };
   }
-  addData = () => {
+  update = () => {
     this.props.dispatch(updateNote(this.state.id,this.state.title,this.state.content,this.state.category));
   }
 
   handleGoBack = () => {
     const { navigation }= this.props; //es6
-    this.addData();
     navigation.navigate('Note');
     //navigation.goBack();
     // this.props.navigation.goBack();
@@ -44,7 +43,9 @@ class UpdateNote extends Component {
           <Right style={{ flex: 1 }}>
             <Button transparent 
               style={{ left:5, top:2 }} 
-              onPress={() => { this.handleGoBack() }}>
+              onPress={async () => { 
+                await this.update()
+                this.handleGoBack() }}>
               <Image source={require('../public/assets/checked.png')}/>
             </Button>
           </Right>

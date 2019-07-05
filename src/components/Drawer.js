@@ -2,6 +2,10 @@ import React, {Component} from 'react';
 import { Container,Header, Body, Content, Thumbnail, Text, Button, List, ListItem } from "native-base";
 import { Image,StyleSheet,SafeAreaView,ScrollView, Dimensions,View, Modal,TextInput, FlatList,TouchableOpacity,TouchableHighlight } from 'react-native';
 import ListCategory from './listCategories';
+import { DrawerActions } from 'react-navigation-drawer';
+
+
+
 
 import { connect } from 'react-redux' 
 import { getCategories, addCategory } from '../public/redux/action/categories'
@@ -22,7 +26,7 @@ class EditPageDrawer extends Component{
     this.props.dispatch(getCategories());
   }
   addData = () => {
-    this.props.dispatch(addCategory(this.state.category_name));
+    this.props.dispatch(addCategory(this.state.category_name,this.state.image_url));
   }
   componentDidMount() {
     this.fetchData()
@@ -30,7 +34,6 @@ class EditPageDrawer extends Component{
   setModalVisible(visible) {
     this.setState({modalVisible: visible}); 
   }
-
   render(){
     return (
       <Container>
@@ -52,7 +55,7 @@ class EditPageDrawer extends Component{
               marginLeft:10 }}>
               <FlatList style={{ alignSelf:'flex-start' }}
                 data={this.props.category.data}
-                renderItem={ ( {item} ) => <ListCategory data={item} />}
+                renderItem={ ( {item} ) => <ListCategory  data={item} navigation={this.props.navigation}/>}
                 keyExtractor={item => item.id.toString()}/> 
               <Button iconLeft transparent 
                 onPress={() => this.setModalVisible(true)}

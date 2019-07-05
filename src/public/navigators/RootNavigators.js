@@ -8,7 +8,7 @@ import AddCategory from '../../categories/AddCategory';
 import EditPageDrawer from '../../components/Drawer';
 
 const editPageDrawer =(props)=>(
-  <EditPageDrawer/>
+  <EditPageDrawer navigation={props.navigation}/>
 )
 const AppNavigator = createStackNavigator({
   Note: {
@@ -28,41 +28,10 @@ const AppNavigator = createStackNavigator({
   }
 });
 
-const {height, width} = Dimensions.get('window');
 const AppDrawerNavigator = createDrawerNavigator({
-  Personal: { 
+  Note: { 
     screen: AppNavigator,
-    navigationOptions: {
-    drawerIcon: ({ tintColor }) => (
-      <Image source={require('../assets/writing.png')} style={[styles.icon, {tintColor: tintColor}]}/>
-      ),
-    }
-  },
-    Wishlist: { 
-      screen:  AddCategory,
-      navigationOptions: {
-        drawerIcon: ({ tintColor }) => (
-          <Image source={require('../assets/wishlist.png')} style={[styles.icon, {tintColor: tintColor}]}/>
-          ),
-        } 
-    },
-    Work: {
-      screen:  AddCategory,
-      navigationOptions: {
-        drawerIcon: ({ tintColor }) => (
-          <Image source={require('../assets/portfolio.png')} style={[styles.icon, {tintColor: tintColor}]}/>
-          ),
-        }
-    },
-    AddCategory: {
-      screen:  AddCategory,
-      navigationOptions: {
-        drawerLabel: 'Add Category',
-        drawerIcon: ({ tintColor }) => (
-          <Image source={require('../assets/plus.png')} style={[styles.icon, {tintColor: tintColor}]}/>
-          ),
-        }
-    },
+  }
 },
 { 
   drawerPosition:'left',
