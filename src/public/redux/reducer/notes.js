@@ -10,8 +10,12 @@ const intialState = {
 
 export default notes = (state = intialState, action) => {
     switch(action.type){
-        case 'GET_NOTES_PENDING':
+        case 'GET_NOTESN_PENDING':
+                return {
+                    ...state,
+                }
         case 'ADD_NOTES_PENDING':
+        case 'GET_NOTES_PENDING':
         case 'GET_NOTESID_PENDING':
         case 'GET_NOTESON_PENDING':
         case 'SEARCH_NOTES_PENDING':
@@ -33,7 +37,7 @@ export default notes = (state = intialState, action) => {
                 isLoading: false, 
                 isError: true,
             }
-        case 'GET_NOTESID_FULFILLED':
+        case 'GET_NOTESN_FULFILLED':
             let notes1 = (state.data.length != 0) ? [ ...state.data, ...action.payload.data.data] : action.payload.data.data
             return {
                 ...state,
@@ -46,13 +50,28 @@ export default notes = (state = intialState, action) => {
                 total : action.payload.data.total,
                 categoryId: action.payload.data.data[0].category.id
             }
-        case 'GET_NOTES_FULFILLED':
-            let notes2 = (state.data.length != 0) ? [ ...state.data, ...action.payload.data.data] : action.payload.data.data
+        case 'GET_NOTESID_FULFILLED':
+            //let notes1 = (state.data.length != 0) ? [ ...state.data, ...action.payload.data.data] : action.payload.data.data
             return {
                 ...state,
                 isLoading: false,
                 isError: false,
-                data: notes2,
+                //data: notes1,
+                data: action.payload.data.data,
+                page: action.payload.data.page,
+                totalpage: action.payload.data.totalpage,
+                limit: action.payload.data.limit,
+                total : action.payload.data.total,
+                categoryId: action.payload.data.data[0].category.id
+            }
+        case 'GET_NOTES_FULFILLED':
+            //let notes2 = (state.data.length != 0) ? [ ...state.data, ...action.payload.data.data] : action.payload.data.data
+            return {
+                ...state,
+                isLoading: false,
+                isError: false,
+                //data: notes2,
+                data: action.payload.data.data,
                 page: action.payload.data.page,
                 totalpage: action.payload.data.totalpage,
                 limit: action.payload.data.limit,

@@ -3,7 +3,7 @@ import { StyleSheet,  ActivityIndicator, RefreshControl, Text,Image, Modal, Touc
 import { Container, Thumbnail, View, Header, Left, Body, Right, Title, Button, Icon, Fab, Content, Item, Input } from 'native-base';
 import ListNote from '../components/flatlist';
 import { connect } from 'react-redux' 
-import { getNotes,searchNotes,onRefresh } from '../public/redux/action/notes'
+import { getNotes,searchNotes,onRefresh,getNotesNext } from '../public/redux/action/notes'
 import debounce from 'lodash.debounce';
 
 var {height} = Dimensions.get('window');
@@ -25,8 +25,12 @@ class Notes extends Component {
     this.setState({modalVisible: visible});
   }
   fetchData = (search,sort,page) => {
-    (this.state.search === '') ? 
+    (this.state.search == '') ? 
     this.props.dispatch(getNotes(sort,page)) : this.props.dispatch(searchNotes(search,sort,page))
+  }
+  fetchData2 = (id,search,sort,page) => {
+    (this.state.search == '') ? 
+    this.props.dispatch(getNotesNext(id,search,sort,page)) : this.props.dispatch(searchNotes(search,sort,page))
   }
   _onRefresh = () => {
     this.setState({refreshing: true});
@@ -53,7 +57,7 @@ class Notes extends Component {
     if(this.state.page < this.props.notes.totalpage) {
       this.setState(
         { page : this.state.page + 1 },
-          ()=>this.fetchData(this.state.search,this.state.sort,this.state.page))
+          ()=>this.fetchData2(this.state.categoryId,this.state.search,this.state.sort,this.state.page))
     }
 }
   render() {
@@ -130,9 +134,7 @@ class Notes extends Component {
             }}>
             <View style={ styles.modal }>
               <TouchableHighlight
-                onPressOut={ () => { 
-                  this.sort() 
-                  } }
+                onPressOut={ () => { this.sort() } }
                 onPress={ () => { this.setState({ sort: 'asc'}) }}>
                 <Text style={{
                   fontSize:20,

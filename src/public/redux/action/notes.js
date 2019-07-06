@@ -8,6 +8,12 @@ export const getNotes = (sort,page) => {
         // payload: axios.get(`http:/192.168.43.142:3002/note?sort=${sort}&page=${page}`)
     }
 }
+export const getNotesNext = (id, search, sort, page) => {
+  return {
+      type: 'GET_NOTESN',
+      payload: axios.get(`http:/192.168.100.67:3002/note?category_id=${id}&search=${search}&sort=${sort}&page=${page}`)
+  }
+}
 export const getNotesByCategory = (id) => {
   return {
       type: 'GET_NOTESID',

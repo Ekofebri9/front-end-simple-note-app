@@ -12,13 +12,11 @@ class ListCategories extends Component {
     this.props.dispatch(deleteCategory(this.props.data.id));
   }
   render() {
-    //console.warn(this.props)
     return (
       <Button iconLeft transparent
         onPress={() => {
           this.props.dispatch(getNotesByCategory(this.props.data.id))
           this.props.navigation.dispatch(DrawerActions.toggleDrawer())
-          console.warn(this.props.notes.categoryId)
         }}
         onLongPress={() => Alert.alert(
           'Delete Category',

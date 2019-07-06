@@ -11,7 +11,7 @@ class UpdateNote extends Component {
     this.state = {
       data: this.props.category.data,
       id: this.props.navigation.state.params.id,
-      category: this.props.navigation.state.params.category.id,
+      category: (this.props.navigation.state.params.category) ? this.props.navigation.state.params.category.id : 0,
       title: this.props.navigation.state.params.title,
       content:  this.props.navigation.state.params.content,
     };
@@ -63,6 +63,7 @@ class UpdateNote extends Component {
               itemStyle={{fontWeight:'bold'}}
               onValueChange={
                 (itemValue, itemIndex) => { this.setState({category: itemValue}) }}>
+                <Picker.Item label={'--Category--'} color={'#FF0078'} />
               {this.state.data.map( item => (
                 <Picker.Item key={item.id} label={item.category_name} value={item.id} />
               ) )}

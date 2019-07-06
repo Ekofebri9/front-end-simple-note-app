@@ -11,6 +11,11 @@ import { deleteNote } from '../public/redux/action/notes'
       data: (this.props.data.length !== 0 ) ? this.props.data : this.props.search
     };
   }
+  // componentWillMount(){
+  //   if ( this.state.data.category ){
+  //     this.setState({ category:{ id: 0, category_name: 'Category not set'} })
+  //   }
+  // }
   dateFormat = (timestamp) => {
     const nameMonth =
       [
@@ -28,11 +33,12 @@ import { deleteNote } from '../public/redux/action/notes'
       '#ff1a1a', '#cc00cc', '#3333cc', '#990099', '#33cccc', '#00ff00',
       '#009900', '#cccc00', '#ff3300', '#ff0066', '#3399ff', '#3366cc'
     ]
-    if ( id === 0 ) {
+    if ( id == 0 ) {
       makeColor = '#330000'
     } else {
-      let idColor = id.toString()
-      makeColor = color[idColor.substr(0,1)]
+      // let idColor = id.toString()
+      // makeColor = color[idColor.substr(1,1)]
+      makeColor=color[id%12]
     }
     return makeColor
   }
@@ -40,14 +46,11 @@ import { deleteNote } from '../public/redux/action/notes'
     this.props.dispatch(deleteNote(this.state.data.id));
   }
   render() {
-    // if ( this.state.data.category == null){
-    //   this.setState({ category:{id: 0, category_name: 'Category not set'} })
-    // }
     return (
       <TouchableOpacity style={{ 
         margin:'2%',
         width: '46%',
-        backgroundColor: this.pickColor(this.state.data.category.id),
+        backgroundColor: this.pickColor(this.state.data.category ? this.state.data.category.id : 0 ),
           borderRadius: 7 }}
         onLongPress={() => Alert.alert(
           'Delete Note',
@@ -96,7 +99,7 @@ import { deleteNote } from '../public/redux/action/notes'
               fontSize:15,
               color:'white' }}
               numberOfLines={1}>
-              {this.state.data.category.category_name}
+              {this.state.data.category ? this.state.data.category.category_name : '-'}
             </Text>
             </View>
           <View style={{ 
