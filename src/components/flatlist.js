@@ -3,25 +3,18 @@ import { Text, View,TouchableOpacity, Alert } from "react-native";
 import { connect } from 'react-redux' 
 import { deleteNote } from '../public/redux/action/notes'
 
-
- class NotesData extends React.Component {
+class NotesData extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       data: (this.props.data.length !== 0 ) ? this.props.data : this.props.search
     };
   }
-  // componentWillMount(){
-  //   if ( this.state.data.category ){
-  //     this.setState({ category:{ id: 0, category_name: 'Category not set'} })
-  //   }
-  // }
   dateFormat = (timestamp) => {
-    const nameMonth =
-      [
-        "January", "February", "March", "April", "May", "June",
-      "July", "August", "September", "October", "November", "December" 
-      ];
+    const nameMonth = [
+      "January", "February", "March", "April", "May", "June",
+      "July", "August", "September", "October", "November", "December"
+    ];
     let date = new Date(Date.parse(timestamp));
     let day = date.getDate();
     let month = date.getMonth(); 
@@ -36,8 +29,6 @@ import { deleteNote } from '../public/redux/action/notes'
     if ( id == 0 ) {
       makeColor = '#330000'
     } else {
-      // let idColor = id.toString()
-      // makeColor = color[idColor.substr(1,1)]
       makeColor=color[id%12]
     }
     return makeColor

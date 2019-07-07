@@ -1,35 +1,27 @@
 import axios from 'axios'
 
-export const getNotes = (sort,page) => {
+export const getNotes = (id,sort,page) => {
     return {
         type: 'GET_NOTES',
-        payload: axios.get(`http:/192.168.100.67:3002/note?sort=${sort}&page=${page}`)
-        // payload: axios.get(`http:/192.168.6.153:3002/note?sort=${sort}&page=${page}`)
-        // payload: axios.get(`http:/192.168.43.142:3002/note?sort=${sort}&page=${page}`)
+        payload: axios.get(`http:/192.168.100.67:3002/note?category_id=${id}&sort=${sort}&page=${page}`)
     }
 }
-export const getNotesNext = (id, search, sort, page) => {
+export const getNotesNext = (id, sort, page) => {
   return {
       type: 'GET_NOTESN',
-      payload: axios.get(`http:/192.168.100.67:3002/note?category_id=${id}&search=${search}&sort=${sort}&page=${page}`)
+      payload: axios.get(`http:/192.168.100.67:3002/note?category_id=${id}&sort=${sort}&page=${page}`)
   }
 }
-export const getNotesByCategory = (id) => {
-  return {
-      type: 'GET_NOTESID',
-      payload: axios.get(`http:/192.168.100.67:3002/note?category_id=${id}`)
-  }
-}
-export const onRefresh = (id, search, sort, page) => {
-  return {
-      type: 'GET_NOTESON',
-      payload: axios.get(`http:/192.168.100.67:3002/note?category_id=${id}&search=${search}&sort=${sort}&page=${page}`)
-  }
-}
-export const searchNotes = (search,sort,page) => {
+export const searchNotes = (id,search,sort,page) => {
   return {
       type: 'SEARCH_NOTES',
-      payload: axios.get(`http:/192.168.100.67:3002/note?search=${search}&sort=${sort}&page=${page}`)
+      payload: axios.get(`http:/192.168.100.67:3002/note?category_id=${id}&search=${search}&sort=${sort}&page=${page}`)
+  }
+}
+export const searchNotesNext = (id,search,sort,page) => {
+  return {
+      type: 'SEARCH_NOTESN',
+      payload: axios.get(`http:/192.168.100.67:3002/note?category_id=${id}&search=${search}&sort=${sort}&page=${page}`)
   }
 } 
 export const addNote = (title,content,categoryId) => {

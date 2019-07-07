@@ -8,12 +8,13 @@ import { updateNote } from '../public/redux/action/notes'
 class UpdateNote extends Component {
   constructor( props ) {
     super( props );
+    const { params } = this.props.navigation.state
     this.state = {
       data: this.props.category.data,
-      id: this.props.navigation.state.params.id,
-      category: (this.props.navigation.state.params.category) ? this.props.navigation.state.params.category.id : 0,
-      title: this.props.navigation.state.params.title,
-      content:  this.props.navigation.state.params.content,
+      id: params.id,
+      category: (params.category) ? params.category.id : 0,
+      title: params.title,
+      content:  params.content,
     };
   }
   update = () => {

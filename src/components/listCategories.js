@@ -4,7 +4,7 @@ import { StyleSheet, Alert } from 'react-native';
 import { DrawerActions } from 'react-navigation-drawer';
 import { connect } from 'react-redux' 
 import { deleteCategory } from '../public/redux/action/categories'
-import { getNotesByCategory } from '../public/redux/action/notes'
+import { getNotes } from '../public/redux/action/notes'
 
 class ListCategories extends Component {
   deleteData = () => {
@@ -14,7 +14,7 @@ class ListCategories extends Component {
     return (
       <Button iconLeft transparent
         onPress={() => {
-          this.props.dispatch(getNotesByCategory(this.props.data.id))
+          this.props.dispatch(getNotes(this.props.data.id,'desc',1))
           this.props.navigation.dispatch(DrawerActions.toggleDrawer())
         }}
         onLongPress={() => Alert.alert(

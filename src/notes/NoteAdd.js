@@ -35,7 +35,7 @@ class AddNote extends Component {
       <Container>
         <Header style={{ backgroundColor: '#FFFFFF' }}>
           <Left style={{ flex: 1 }}>
-            <Button transparent onPress={ this.props.navigation.goBack() } >
+            <Button transparent onPress={ () => this.props.navigation.goBack() } >
               <Icon name='arrow-back' style={{ color: 'black' }}/>
             </Button>
           </Left>

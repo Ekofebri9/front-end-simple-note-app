@@ -11,13 +11,12 @@ const intialState = {
 export default notes = (state = intialState, action) => {
     switch(action.type){
         case 'GET_NOTESN_PENDING':
+        case 'SEARCH_NOTESN_REJECTED':
                 return {
                     ...state,
                 }
         case 'ADD_NOTES_PENDING':
         case 'GET_NOTES_PENDING':
-        case 'GET_NOTESID_PENDING':
-        case 'GET_NOTESON_PENDING':
         case 'SEARCH_NOTES_PENDING':
         case 'UPDATE_NOTES_PENDING':
         case 'DELETE_NOTES_PENDING':
@@ -26,9 +25,9 @@ export default notes = (state = intialState, action) => {
                 isLoading: true
             }
         case 'GET_NOTES_REJECTED':
-        case 'GET_NOTESON_PENDING':
-        case 'GET_NOTESID_REJECTED':
         case 'ADD_NOTES_REJECTED':
+        case 'GET_NOTESN_PENDING':
+        case 'SEARCH_NOTESN_REJECTED':
         case 'SEARCH_NOTES_REJECTED':
         case 'UPDATE_NOTES_REJECTED':
         case 'DELETE_NOTES_REJECTED':
@@ -38,46 +37,29 @@ export default notes = (state = intialState, action) => {
                 isError: true,
             }
         case 'GET_NOTESN_FULFILLED':
-            let notes1 = (state.data.length != 0) ? [ ...state.data, ...action.payload.data.data] : action.payload.data.data
             return {
                 ...state,
                 isLoading: false,
                 isError: false,
-                data: notes1,
+                data: [ ...state.data, ...action.payload.data.data],
                 page: action.payload.data.page,
                 totalpage: action.payload.data.totalpage,
                 limit: action.payload.data.limit,
                 total : action.payload.data.total,
-                categoryId: action.payload.data.data[0].category.id
+                categoryId: action.payload.data.categoryId
             }
-        case 'GET_NOTESID_FULFILLED':
-            //let notes1 = (state.data.length != 0) ? [ ...state.data, ...action.payload.data.data] : action.payload.data.data
+        case 'SEARCH_NOTESN_FULFILLED':
             return {
                 ...state,
                 isLoading: false,
                 isError: false,
-                //data: notes1,
-                data: action.payload.data.data,
+                search: [ ...state.data, ...action.payload.data.data],
                 page: action.payload.data.page,
                 totalpage: action.payload.data.totalpage,
                 limit: action.payload.data.limit,
-                total : action.payload.data.total,
-                categoryId: action.payload.data.data[0].category.id
+                total : action.payload.data.total
             }
         case 'GET_NOTES_FULFILLED':
-            //let notes2 = (state.data.length != 0) ? [ ...state.data, ...action.payload.data.data] : action.payload.data.data
-            return {
-                ...state,
-                isLoading: false,
-                isError: false,
-                //data: notes2,
-                data: action.payload.data.data,
-                page: action.payload.data.page,
-                totalpage: action.payload.data.totalpage,
-                limit: action.payload.data.limit,
-                total : action.payload.data.total
-            }
-        case 'GET_NOTESON_FULFILLED':
             return {
                 ...state,
                 isLoading: false,
@@ -86,10 +68,12 @@ export default notes = (state = intialState, action) => {
                 page: action.payload.data.page,
                 totalpage: action.payload.data.totalpage,
                 limit: action.payload.data.limit,
-                total : action.payload.data.total
+                total : action.payload.data.total,
+                categoryId : action.payload.data.categoryId,
+                sort: action.payload.data.sort
+                
             }
         case 'SEARCH_NOTES_FULFILLED':
-            //let notes3 = (state.search.length != 0) ? [ ...state.search, ...action.payload.data.data] : action.payload.data.data
             return {
                 ...state,
                 isLoading: false,
@@ -108,14 +92,13 @@ export default notes = (state = intialState, action) => {
                 data: [action.payload.data.data, ...state.data],
             }
         case 'UPDATE_NOTES_FULFILLED':
+            state.data.filter(note => note.id !== action.payload.data.data.id )
+            
             return {
                 ...state,
                 isLoading: false,
                 isError: false,
-                data:state.data.map( note =>
-                    (note.id == action.payload.data.data.id) ? 
-                        action.payload.data.data : note
-                )
+                data: [action.payload.data.data, ...state.data],
             }
         case 'DELETE_NOTES_FULFILLED':
             return {

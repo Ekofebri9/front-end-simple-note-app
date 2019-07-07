@@ -3,7 +3,7 @@ import { StyleSheet,  ActivityIndicator, RefreshControl, Text,Image, Modal, Touc
 import { Container, Thumbnail, View, Header, Left, Body, Right, Title, Button, Icon, Fab, Item, Input } from 'native-base';
 import ListNote from '../components/flatlist';
 import { connect } from 'react-redux' 
-import { getNotes,searchNotes,onRefresh,getNotesNext } from '../public/redux/action/notes'
+import { getNotes,searchNotes,searchNotesNext,getNotesNext } from '../public/redux/action/notes'
 import debounce from 'lodash.debounce';
 
 var {height} = Dimensions.get('window');
@@ -14,49 +14,55 @@ class Notes extends Component {
     this.state = {
       refreshing: false,
       modalVisible: false,
-      praSort: 'desc',
       sort: 'desc',
       page: 1,
       search: '',
-      categoryId: ''
     };
   }
   setModalVisible(visible) {
     this.setState({modalVisible: visible});
   }
-  fetchData = (search,sort,page) => {
+  fetchData = (id,search,sort,page) => {
     (this.state.search == '') ? 
-    this.props.dispatch(getNotes(sort,page)) : this.props.dispatch(searchNotes(search,sort,page))
+    this.props.dispatch(getNotes(id,sort,page)) : this.props.dispatch(searchNotes(id,search,sort,page))
   }
-  fetchData2 = (id,search,sort,page) => {
+  fetchDataNext = (id,search,sort,page) => {
     (this.state.search == '') ? 
-    this.props.dispatch(getNotesNext(id,search,sort,page)) : this.props.dispatch(searchNotes(search,sort,page))
+    this.props.dispatch(getNotesNext(id,sort,page)) : this.props.dispatch(searchNotesNext(id,search,sort,page))
   }
   _onRefresh = () => {
-    this.setState({refreshing: true});
-    this.props.dispatch(onRefresh(this.state.categoryId,this.state.search,this.state.sort,1))
-    this.setState({refreshing: false, page: 1 });
+    this.setState({
+      refreshing: true,
+      sort: 'desc',
+      page: 1,
+      search: '',
+    },() => this.fetchData('',this.state.search,this.state.sort,this.state.page));
+    this.setState({refreshing: false });
      
   }
   sort(){
     this.setModalVisible(!this.state.modalVisible);
-    if ( this.state.praSort !== this.state.sort ) {
-      this.fetchData(this.state.search,this.state.sort,this.state.page)
-      this.setState({praSort: this.state.sort})
-    }
+    this.setState({page: 1 }, () => {
+      if ( this.props.notes.sort !== this.state.sort ) {
+        let id = (this.props.notes.categoryId != null) ? this.props.notes.categoryId : ''
+        this.fetchData(id,this.state.search,this.state.sort,this.state.page)
+      }
+    });
   }
   search = (keyword) => {
-    this.setState({search: keyword})
-    this.fetchData(keyword,this.state.sort,1)
+    this.setState({search : keyword})
+    let id = (this.props.notes.categoryId != null) ? this.props.notes.categoryId : ''
+    this.fetchData(id,this.state.search,this.state.sort,1)
   }
   componentDidMount() {
-    this.fetchData(this.state.search,this.state.sort,this.state.page)
+    this.fetchData('',this.state.search,this.state.sort,this.state.page)
   }
   handleLoadMore = async () => {
-    if(this.state.page < this.props.notes.totalpage) {
+    if(this.props.notes.page < this.props.notes.totalpage) {
+      let id = (this.props.notes.categoryId != null) ? this.props.notes.categoryId : ''
       this.setState(
-        { page : this.state.page + 1 },
-          ()=>this.fetchData2(this.state.categoryId,this.state.search,this.state.sort,this.state.page))
+        { page : this.props.notes.page + 1 },
+          ()=>this.fetchDataNext(id,this.state.search,this.state.sort,this.state.page))
     }
 }
   render() {
@@ -84,7 +90,7 @@ class Notes extends Component {
           shadowOpacity:5}}>
           <Item rounded style={ styles.search }>
             <Input placeholder='Search.... '
-              onChangeText={debounce(this.search,10)}
+              onChangeText={debounce(this.search,300)}
               value={this.state.search}/>
           </Item>
         </View>
@@ -101,12 +107,7 @@ class Notes extends Component {
                   keyExtractor={(item, index) => index.toString()}
                   onEndReachedThreshold={0.1}
                   onEndReached={this.handleLoadMore}
-                  refreshControl={
-                    <RefreshControl
-                      refreshing={this.props.notes.isLoading}
-                      onRefresh={this._onRefresh}
-                    />
-                  }
+                  refreshControl={ <RefreshControl refreshing={ this.props.notes.isLoading } onRefresh={ this._onRefresh } /> }
                   numColumns={2}
                 />)
               }
