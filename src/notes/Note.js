@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import { StyleSheet,  ActivityIndicator, RefreshControl, Text,Image, Modal, TouchableHighlight,Dimensions, FlatList } from 'react-native';
-import { Container, Thumbnail, View, Header, Left, Body, Right, Title, Button, Icon, Fab, Content, Item, Input } from 'native-base';
+import { Container, Thumbnail, View, Header, Left, Body, Right, Title, Button, Icon, Fab, Item, Input } from 'native-base';
 import ListNote from '../components/flatlist';
 import { connect } from 'react-redux' 
 import { getNotes,searchNotes,onRefresh,getNotesNext } from '../public/redux/action/notes'
@@ -35,7 +35,7 @@ class Notes extends Component {
   _onRefresh = () => {
     this.setState({refreshing: true});
     this.props.dispatch(onRefresh(this.state.categoryId,this.state.search,this.state.sort,1))
-        this.setState({refreshing: false, page: 1 });
+    this.setState({refreshing: false, page: 1 });
      
   }
   sort(){
@@ -46,7 +46,6 @@ class Notes extends Component {
     }
   }
   search = (keyword) => {
-    //if (this.state.search !== '') this.fetchData(this.state.search,this.state.sort,this.state.page)
     this.setState({search: keyword})
     this.fetchData(keyword,this.state.sort,1)
   }

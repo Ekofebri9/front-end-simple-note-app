@@ -1,8 +1,6 @@
 import React, {Component} from 'react';
-import { Image,StyleSheet,Picker } from 'react-native';
+import { Alert, Image, StyleSheet, Picker } from 'react-native';
 import { Container, Text, Header, Left, Body, Right, Title, Button, Icon, Content, Form, Textarea } from 'native-base';
-import axios from 'axios';
-
 import { connect } from 'react-redux' 
 import { addNote } from '../public/redux/action/notes'
 
@@ -11,22 +9,33 @@ class AddNote extends Component {
     super( props );
     this.state = {
       data: this.props.category.data,
+      title: '',
+      content: '',
+      category: 0
     };
+  }
+  add = () => {
+    if (this.state.title === '' || this.state.content === '' || this.state.category === 0) {
+      Alert.alert(
+        'Form is empty',
+        'Please fill in all form',
+        [{text: 'OK'}],
+        {cancelable: false},
+      )
+    } else {
+      this.addData()
+      this.props.navigation.goBack()
+    }
   }
   addData = () => {
     this.props.dispatch(addNote(this.state.title,this.state.content,this.state.category));
-  }
-
-  handleGoBack = () => {
-    const { navigation }= this.props; //es6
-    navigation.navigate('Note');
   }
   render() {
     return (
       <Container>
         <Header style={{ backgroundColor: '#FFFFFF' }}>
           <Left style={{ flex: 1 }}>
-            <Button transparent onPress={ this.handleGoBack } >
+            <Button transparent onPress={ this.props.navigation.goBack() } >
               <Icon name='arrow-back' style={{ color: 'black' }}/>
             </Button>
           </Left>
@@ -38,10 +47,7 @@ class AddNote extends Component {
           <Right style={{ flex: 1 }}>
             <Button transparent 
               style={{ left:5, top:2 }} 
-              onPress={() => { 
-                this.addData()
-                this.handleGoBack()
-                }}>
+              onPress={() => { this.add() }}>
               <Image source={require('../public/assets/checked.png')}/>
             </Button>
           </Right>
@@ -64,7 +70,6 @@ class AddNote extends Component {
                 <Picker.Item key={item.id} label={item.category_name} value={item.id} />
               ) )}
             </Picker>
-
           </Form>
         </Content>
       </Container>
@@ -77,9 +82,7 @@ const mapStateToProps= state => {
       notes: state.notes,
   }
 }
-
 export default connect(mapStateToProps)(AddNote)
-
 const styles = StyleSheet.create({
   pick: {
     height: 50,

@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { Image,StyleSheet,Picker } from 'react-native';
+import { Alert, Image,StyleSheet,Picker } from 'react-native';
 import { Container, Text, Header, Left, Body, Right, Title, Button, Icon, Content, Form, Textarea } from 'native-base';
 
 import { connect } from 'react-redux' 
@@ -17,14 +17,20 @@ class UpdateNote extends Component {
     };
   }
   update = () => {
-    this.props.dispatch(updateNote(this.state.id,this.state.title,this.state.content,this.state.category));
+    if ( this.state.title === '' || this.state.content === '' ) {
+      Alert.alert(
+        'Form is empty',
+        'Please fill in all form',
+        [{text: 'OK'}],
+        {cancelable: false},
+      )
+    } else {
+      this.updateData()
+      this.props.navigation.goBack()
+    }
   }
-
-  handleGoBack = () => {
-    const { navigation }= this.props; //es6
-    navigation.navigate('Note');
-    //navigation.goBack();
-    // this.props.navigation.goBack();
+  updateData = () => {
+    this.props.dispatch(updateNote(this.state.id,this.state.title,this.state.content,this.state.category));
   }
   render() {
     return (
@@ -43,9 +49,7 @@ class UpdateNote extends Component {
           <Right style={{ flex: 1 }}>
             <Button transparent 
               style={{ left:5, top:2 }} 
-              onPress={async () => { 
-                await this.update()
-                this.handleGoBack() }}>
+              onPress={ () => this.update() }>
               <Image source={require('../public/assets/checked.png')}/>
             </Button>
           </Right>
@@ -63,12 +67,10 @@ class UpdateNote extends Component {
               itemStyle={{fontWeight:'bold'}}
               onValueChange={
                 (itemValue, itemIndex) => { this.setState({category: itemValue}) }}>
-                <Picker.Item label={'--Category--'} color={'#FF0078'} />
               {this.state.data.map( item => (
                 <Picker.Item key={item.id} label={item.category_name} value={item.id} />
               ) )}
             </Picker>
-
           </Form>
         </Content>
       </Container>

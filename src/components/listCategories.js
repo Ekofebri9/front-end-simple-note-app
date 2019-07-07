@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Text, Button, Icon } from 'native-base';
 import { StyleSheet, Alert } from 'react-native';
 import { DrawerActions } from 'react-navigation-drawer';
-
 import { connect } from 'react-redux' 
 import { deleteCategory } from '../public/redux/action/categories'
 import { getNotesByCategory } from '../public/redux/action/notes'
@@ -39,7 +38,6 @@ const mapStateToProps = state => {
       notes: state.notes,
   }
 }
-
 export default connect(mapStateToProps)(ListCategories)
 const styles = StyleSheet.create({
   icon: {

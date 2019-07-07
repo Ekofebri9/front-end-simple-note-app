@@ -23,7 +23,6 @@ const AppNavigator = createStackNavigator({
 },
 {
   defaultNavigationOptions: {
-    //initialRouteName: Note,
     header: null,
   }
 });

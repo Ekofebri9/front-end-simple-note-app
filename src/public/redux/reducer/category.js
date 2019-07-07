@@ -11,12 +11,11 @@ export default categories = (state = intialState, action) => {
                 isError: false,
                 data:action.payload.data.data
             }
-        // Add category
         case 'ADD_CATEGORIES_PENDING':
         case 'DELETE_CATEGORIES_REJECTED':
         case 'GET_CATEGORIES_PENDING':
             return {
-                ...state, // get all previous state
+                ...state,
                 isLoading: true
             }
         case 'ADD_CATEGORIES_REJECTED':
