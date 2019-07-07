@@ -173,5 +173,5 @@ const styles = StyleSheet.create({
     backgroundColor:'white',
     borderRadius: 5,
     elevation: 1
-    }
+    },
   });

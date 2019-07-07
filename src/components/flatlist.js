@@ -48,8 +48,9 @@ import { deleteNote } from '../public/redux/action/notes'
   render() {
     return (
       <TouchableOpacity style={{ 
-        margin:'2%',
-        width: '46%',
+        elevation: 4,
+        margin:'4%',
+        width: '42%',
         backgroundColor: this.pickColor(this.state.data.category ? this.state.data.category.id : 0 ),
           borderRadius: 7 }}
         onLongPress={() => Alert.alert(
