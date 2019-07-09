@@ -1,5 +1,5 @@
-import React, {Component} from 'react';
-import { StyleSheet,  ActivityIndicator, RefreshControl, Text,Image, Modal, TouchableHighlight,Dimensions, FlatList } from 'react-native';
+import React, { Component } from 'react';
+import { StyleSheet, ActivityIndicator, RefreshControl, Text, Image, Modal, TouchableHighlight, Dimensions, FlatList } from 'react-native';
 import { Container, Thumbnail, View, Header, Left, Body, Right, Title, Button, Icon, Fab, Item, Input } from 'native-base';
 import ListNote from '../components/flatlist';
 import { connect } from 'react-redux' 
@@ -22,13 +22,13 @@ class Notes extends Component {
   setModalVisible(visible) {
     this.setState({modalVisible: visible});
   }
-  fetchData = (id,search,sort,page) => {
-    (this.state.search == '') ? 
-    this.props.dispatch(getNotes(id,sort,page)) : this.props.dispatch(searchNotes(id,search,sort,page))
+  fetchData = ( id,search,sort,page ) => {
+    ( this.state.search == '' ) ? 
+    this.props.dispatch( getNotes( id,sort,page )) : this.props.dispatch( searchNotes( id,search,sort,page ))
   }
   fetchDataNext = (id,search,sort,page) => {
     (this.state.search == '') ? 
-    this.props.dispatch(getNotesNext(id,sort,page)) : this.props.dispatch(searchNotesNext(id,search,sort,page))
+    this.props.dispatch( getNotesNext( id,sort,page )) : this.props.dispatch( searchNotesNext( id,search,sort,page ))
   }
   _onRefresh = () => {
     this.setState({
@@ -36,30 +36,30 @@ class Notes extends Component {
       sort: 'desc',
       page: 1,
       search: '',
-    },() => this.fetchData('',this.state.search,this.state.sort,this.state.page));
-    this.setState({refreshing: false });
+    },() => this.fetchData( '',this.state.search,this.state.sort,this.state.page ));
+    this.setState({ refreshing: false });
      
   }
   sort(){
-    this.setModalVisible(!this.state.modalVisible);
-    this.setState({page: 1 }, () => {
+    this.setModalVisible( !this.state.modalVisible );
+    this.setState({ page: 1 }, () => {
       if ( this.props.notes.sort !== this.state.sort ) {
-        let id = (this.props.notes.categoryId != null) ? this.props.notes.categoryId : ''
-        this.fetchData(id,this.state.search,this.state.sort,this.state.page)
+        let id = ( this.props.notes.categoryId != null ) ? this.props.notes.categoryId : ''
+        this.fetchData( id,this.state.search,this.state.sort,this.state.page )
       }
     });
   }
-  search = (keyword) => {
-    this.setState({search : keyword})
-    let id = (this.props.notes.categoryId != null) ? this.props.notes.categoryId : ''
-    this.fetchData(id,this.state.search,this.state.sort,1)
+  search = ( keyword ) => {
+    this.setState({ earch : keyword })
+    let id = ( this.props.notes.categoryId != null ) ? this.props.notes.categoryId : ''
+    this.fetchData( id,this.state.search,this.state.sort,1 )
   }
   componentDidMount() {
-    this.fetchData('',this.state.search,this.state.sort,this.state.page)
+    this.fetchData( '',this.state.search,this.state.sort,this.state.page )
   }
   handleLoadMore = async () => {
-    if(this.props.notes.page < this.props.notes.totalpage) {
-      let id = (this.props.notes.categoryId != null) ? this.props.notes.categoryId : ''
+    if( this.props.notes.page < this.props.notes.totalpage ) {
+      let id = ( this.props.notes.categoryId != null) ? this.props.notes.categoryId : ''
       this.setState(
         { page : this.props.notes.page + 1 },
           ()=>this.fetchDataNext(id,this.state.search,this.state.sort,this.state.page))
@@ -69,25 +69,24 @@ class Notes extends Component {
     return (
       <Container>
         <Header style={{ backgroundColor: '#FFFFFF' }}>
-          <Left style={{flex: 1}}>
-            <Button transparent onPress={() => this.props.navigation.openDrawer()} >
-              <Thumbnail small source={require('../public/assets/foto.png')}/>
+          <Left style={{ flex: 1 }}>
+            <Button transparent onPress={() => this.props.navigation.openDrawer() }>
+              <Thumbnail small source={ require('../public/assets/foto.png' )}/>
             </Button>
           </Left>
-          <Body style={{flex: 1,
-            alignItems:'center'}}>
+          <Body style={{ flex: 1, alignItems:'center' }}>
             <Title style={{ color: 'black' }}>Note App</Title>
           </Body>
           <Right style={{ flex: 1 }}>
             <Button transparent onPress={() => { this.setModalVisible(true); }} >
-              <Image style={ styles.icon } source={require('../public/assets/download.png')}/>
+              <Image style={ styles.icon } source={ require('../public/assets/download.png' )}/>
             </Button>
           </Right>
         </Header>
         <View style={{
           paddingVertical:10,
           shadowRadius:5,
-          shadowOpacity:5}}>
+          shadowOpacity:5 }}>
           <Item rounded style={ styles.search }>
             <Input placeholder='Search.... '
               onChangeText={debounce(this.search,300)}
