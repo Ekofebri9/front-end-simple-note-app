@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import { Alert, Image, StyleSheet, Picker } from 'react-native';
 import { Container, Text, Header, Left, Body, Right, Title, Button, Icon, Content, Form, Textarea } from 'native-base';
 import { connect } from 'react-redux' 
@@ -15,12 +15,12 @@ class AddNote extends Component {
     };
   }
   add = () => {
-    if (this.state.title === '' || this.state.content === '' || this.state.category === 0) {
+    if ( this.state.title === '' || this.state.content === '' || this.state.category === 0 ) {
       Alert.alert(
         'Form is empty',
         'Please fill in all form',
-        [{text: 'OK'}],
-        {cancelable: false},
+        [{ text: 'OK' }],
+        { cancelable: false },
       )
     } else {
       this.addData()
@@ -28,46 +28,54 @@ class AddNote extends Component {
     }
   }
   addData = () => {
-    this.props.dispatch(addNote(this.state.title,this.state.content,this.state.category));
+    this.props.dispatch( addNote ( this.state.title,this.state.content,this.state.category ));
   }
   render() {
     return (
       <Container>
         <Header style={{ backgroundColor: '#FFFFFF' }}>
           <Left style={{ flex: 1 }}>
-            <Button transparent onPress={ () => this.props.navigation.goBack() } >
+            <Button transparent onPress={ () => this.props.navigation.goBack() }>
               <Icon name='arrow-back' style={{ color: 'black' }}/>
             </Button>
           </Left>
           <Body style={{
             flex: 1,
             alignItems:'center'}}>
-            <Title style={{ color: 'black' }}>Add Note</Title>
+            <Title style={{ color: 'black' }}> Add Note </Title>
           </Body>
           <Right style={{ flex: 1 }}>
             <Button transparent 
               style={{ left:5, top:2 }} 
-              onPress={() => { this.add() }}>
-              <Image source={require('../public/assets/checked.png')}/>
+              onPress={ () => { this.add() }}>
+              <Image source={ require( '../public/assets/checked.png' )}/>
             </Button>
           </Right>
         </Header>
         <Content padder>
         <Form style={{ marginLeft:15, marginTop:20 }}>
-            <Textarea style={{ fontSize:20 }} rowSpan={2} placeholder='ADD TITLE...' onChangeText={(text) => this.setState({title: text})} />
+            <Textarea 
+              style={{ fontSize:20 }}
+              rowSpan={2}
+              placeholder='ADD TITLE...' 
+              onChangeText={(text) => this.setState({ title: text })}/>
           </Form>
           <Form style={{ marginLeft:15, marginBottom:10 }}>
-            <Textarea style={{ fontSize:20 }} rowSpan={12} placeholder='ADD DESCRIPTION...' onChangeText={(text) => this.setState({content: text})} />
-            <Text style={{ paddingLeft:5, fontWeight:'bold', fontSize: 20 }}>Category</Text>
+            <Textarea
+              style={{ fontSize:20 }}
+              rowSpan={12}
+              placeholder='ADD DESCRIPTION...'
+              onChangeText={(text) => this.setState({content: text})}/>
+            <Text style={{ styles.text }}>Category</Text>
             <Picker
               selectedValue={this.state.category}
-              style={styles.pick}
-              itemStyle={{fontWeight:'bold'}}
+              style={ styles.pick }
+              itemStyle={{ fontWeight:'bold' }}
               onValueChange={
                 (itemValue, itemIndex) => { this.setState({category: itemValue}) }}>
-                <Picker.Item label={'--Category--'} color={'#FF0078'} />
-              {this.state.data.map( item => (
-                <Picker.Item key={item.id} label={item.category_name} value={item.id} />
+                <Picker.Item label={ '--Category--' } color={ '#FF0078' } />
+                {this.state.data.map( item => (
+                  <Picker.Item key={ item.id } label={ item.category_name } value={ item.id }/>
               ) )}
             </Picker>
           </Form>
@@ -93,5 +101,10 @@ const styles = StyleSheet.create({
   icon: {
     width: 24,
     height: 24,
+  },
+  text: {
+   paddingLeft:5,
+   fontWeight:'bold',
+   fontSize: 20
   }
 });
