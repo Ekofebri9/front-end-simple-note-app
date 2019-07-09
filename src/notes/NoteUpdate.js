@@ -22,8 +22,8 @@ class UpdateNote extends Component {
       Alert.alert(
         'Form is empty',
         'Please fill in all form',
-        [{text: 'OK'}],
-        {cancelable: false},
+        [{ text: 'OK' }],
+        { cancelable: false },
       )
     } else {
       this.updateData()
@@ -31,7 +31,7 @@ class UpdateNote extends Component {
     }
   }
   updateData = () => {
-    this.props.dispatch(updateNote(this.state.id,this.state.title,this.state.content,this.state.category));
+    this.props.dispatch( updateNote( this.state.id,this.state.title,this.state.content,this.state.category ));
   }
   render() {
     return (
@@ -57,19 +57,27 @@ class UpdateNote extends Component {
         </Header>
         <Content padder>
         <Form style={{ marginLeft:15, marginTop:20 }}>
-            <Textarea style={{ fontSize:20 }} rowSpan={2} placeholder='ADD TITLE...' onChangeText={(text) => this.setState({title: text})} value={this.state.title}/>
+            <Textarea 
+            style={{ fontSize:20 }}
+            rowSpan={2}
+            placeholder='ADD TITLE...'
+            onChangeText={(text) => this.setState({title: text})} value={this.state.title}/>
           </Form>
           <Form style={{ marginLeft:15, marginBottom:10 }}>
-            <Textarea style={{ fontSize:20 }} rowSpan={12} placeholder='ADD DESCRIPTION...' onChangeText={(text) => this.setState({content: text})} value={this.state.content}/>
-            <Text style={{ paddingLeft:5, fontWeight:'bold', fontSize: 20 }}>Category</Text>
+            <Textarea
+              style={{ fontSize:20 }}
+              rowSpan={12}
+              placeholder='ADD DESCRIPTION...'
+              onChangeText={(text) => this.setState({content: text})} value={this.state.content}/>
+            <Text style={{ styles.text }}>Category</Text>
             <Picker
               selectedValue={this.state.category}
               style={styles.pick}
               itemStyle={{fontWeight:'bold'}}
               onValueChange={
                 (itemValue, itemIndex) => { this.setState({category: itemValue}) }}>
-              {this.state.data.map( item => (
-                <Picker.Item key={item.id} label={item.category_name} value={item.id} />
+              { this.state.data.map( item => (
+                <Picker.Item key={ item.id } label={ item.category_name } value={ item.id }/>
               ) )}
             </Picker>
           </Form>
@@ -97,5 +105,10 @@ const styles = StyleSheet.create({
   icon: {
     width: 24,
     height: 24,
+  },
+  text: {
+    paddingLeft:5,
+    fontWeight:'bold',
+    fontSize: 20
   }
 });
