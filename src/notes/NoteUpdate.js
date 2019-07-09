@@ -69,10 +69,10 @@ class UpdateNote extends Component {
               rowSpan={12}
               placeholder='ADD DESCRIPTION...'
               onChangeText={(text) => this.setState({content: text})} value={this.state.content}/>
-            <Text style={{ styles.text }}>Category</Text>
+            <Text style={ styles.text }>Category</Text>
             <Picker
               selectedValue={this.state.category}
-              style={styles.pick}
+              style={ styles.pick }
               itemStyle={{fontWeight:'bold'}}
               onValueChange={
                 (itemValue, itemIndex) => { this.setState({category: itemValue}) }}>

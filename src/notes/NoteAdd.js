@@ -66,7 +66,7 @@ class AddNote extends Component {
               rowSpan={12}
               placeholder='ADD DESCRIPTION...'
               onChangeText={(text) => this.setState({content: text})}/>
-            <Text style={{ styles.text }}>Category</Text>
+            <Text style={ styles.text }>Category</Text>
             <Picker
               selectedValue={this.state.category}
               style={ styles.pick }

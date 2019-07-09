@@ -83,18 +83,14 @@ class Notes extends Component {
             </Button>
           </Right>
         </Header>
-        <View style={{
-          paddingVertical:10,
-          shadowRadius:5,
-          shadowOpacity:5 }}>
+        <View style={ styles.viewSearch }>
           <Item rounded style={ styles.search }>
             <Input placeholder='Search.... '
               onChangeText={debounce(this.search,300)}
               value={this.state.search}/>
           </Item>
         </View>
-            <View style={{flex:1, flexDirection: 'row', height: '100%',
-              padding: '2%', paddingBottom:0 }}>
+            <View style={ viewFlatlist }>
               {
                 this.props.notes.isLoading ? 
                 (<View style={[styles.container, styles.horizontal]}>
@@ -135,18 +131,14 @@ class Notes extends Component {
               <TouchableHighlight
                 onPressOut={ () => { this.sort() } }
                 onPress={ () => { this.setState({ sort: 'asc'}) }}>
-                <Text style={{
-                  fontSize:20,
-                  color:'black'}}>
+                <Text style={ styles.text }>
                   Ascending
                 </Text>
               </TouchableHighlight>
               <TouchableHighlight
                 onPressOut={ () => { this.sort() } }
                 onPress={ () => { this.setState({ sort: 'desc'}) } }>
-                <Text style={{
-                  fontSize:20,
-                  color:'black'}}>
+                <Text style={ styles.text }>
                   Descending
                 </Text>
               </TouchableHighlight>
@@ -204,5 +196,21 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 5,
     elevation: 5
+  },
+  text: {
+    fontSize:20,
+    color:'black'
+  },
+  viewFlatlist: {
+    flex:1,
+    flexDirection: 'row',
+    height: '100%',
+    padding: '2%',
+    paddingBottom:0 
+  },
+  viewSearch: {
+    paddingVertical:10,
+    shadowRadius:5,
+    shadowOpacity:5
   }
 });
