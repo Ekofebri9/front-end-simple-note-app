@@ -57,20 +57,20 @@ Find 'http://192.168.100.67:3002' and replace with your IP server/back-end then 
 so if you will try this app you can rebuild this app following step from https://facebook.github.io/react-native/docs/signed-apk-android
 <b>If</b> you need more detail of my demo, just visit this link https://drive.google.com/file/d/1MG5aO7fZuX3mKpsg_xdGxDfpGSIdIkh4/view?usp=sharing<br>
 In my video ,I show you what can this app do....<br>
--fitur sorting asc and desc<br>
--search by title<br>
--pull to refresh<br>
--load more note automaticly<br>
--different color of note depend on category's note <br>
--load note by category<br>
--combine load by category and search and sorting<br>
--add and delete category, for deleting press and hold until show alert for makesure that you will delete<br>
--add, edit and delete note, for deleting press and hold until show alert for makesure that you will delete ad for updating just             click press the note <br>
-
+  -fitur sorting asc and desc<br>
+  -search by title<br>
+  -pull to refresh<br>
+  -load more note automaticly<br>
+  -different color of note depend on category's note <br>
+  -load note by category<br>
+  -combine load by category and search and sorting<br>
+  -add and delete category, for deleting press and hold until show alert for makesure that you will delete<br>
+  -add, edit and delete note, for deleting press and hold until show alert for makesure that you will delete ad for updating just               click press the note <br>
 
 ## Screenshot from the app
-![Screenshot_2019-07-07-19-58-34-522_com testapp](https://user-images.githubusercontent.com/50242300/60768904-aa874680-a0f3-11e9-871b-4a28bab63b4e.png)
-![Screenshot_2019-07-07-19-58-20-435_com testapp](https://user-images.githubusercontent.com/50242300/60768905-aa874680-a0f3-11e9-99c6-2836d15e0253.png)
-![Screenshot_2019-07-07-19-58-10-373_com testapp](https://user-images.githubusercontent.com/50242300/60768906-aa874680-a0f3-11e9-840a-38ec2448e7b7.png)
-![Screenshot_2019-07-07-19-58-03-881_com testapp](https://user-images.githubusercontent.com/50242300/60768907-ab1fdd00-a0f3-11e9-8d93-165d8a760d55.png)
-  
+<span>
+  <img src='https://raw.githubusercontent.com/Ekofebri9/front-end-simple-note-app/master/src/public/assets/Screenshot_2019-07-07-19-58-03-881_com.testapp.png' width=200 border=1 />
+  <img src='https://raw.githubusercontent.com/Ekofebri9/front-end-simple-note-app/master/src/public/assets/Screenshot_2019-07-07-19-58-10-373_com.testapp.png' width=200 border=1 />
+  <img src='https://raw.githubusercontent.com/Ekofebri9/front-end-simple-note-app/master/src/public/assets/Screenshot_2019-07-07-19-58-20-435_com.testapp.png' width=200 border=1 />
+  <img src='https://raw.githubusercontent.com/Ekofebri9/front-end-simple-note-app/master/src/public/assets/Screenshot_2019-07-07-19-58-34-522_com.testapp.png' width=200 border=1 />
+</span>
